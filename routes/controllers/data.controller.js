@@ -9,8 +9,8 @@ router.get('/', data);
 router.post('/uploadVideo', uploadVideo);
 router.post('/checkAnalyse', checkAnalyse)
 
-var videoTempPath = "videoTemp/";
-var resultpath = "result/";
+var videoTempPath = "./videoTemp/";
+var resultpath = "./result/";
 
 function data(req, res, next) {
     res.render('data', { title: 'VideoSegmentation' })
@@ -22,13 +22,13 @@ function uploadVideo(req, res, next) {
     form.parse(req, function(error, fields, files) {
         var ms = new Date().getTime();
         var videoMD5 = md5(String(ms + Math.random()));
-        fs.renameSync(files.videoFile.path, '${videoTempPath}${videoMD5}.mp4');
+        fs.renameSync(files.videoFile.path, `${videoTempPath}${videoMD5}.mp4`);
         res.send(videoMD5);
     })
 }
 
 function checkAnalyse(req, res, next) {
-    return res.send(-1);
+    return res.send("-1");
 }
 
 /**
