@@ -35,3 +35,13 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+#image
+.bmp
+.jpg
+
+#video
+.mp4
+
+#python
+.pyc

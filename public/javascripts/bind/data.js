@@ -1,3 +1,9 @@
+var canvas;
+var context;
+var resultpath = "/images/result/";
+
+
+
 var app = new Vue({
     el: "#selector",
     data: {
@@ -6,7 +12,8 @@ var app = new Vue({
         currentState: 1, // 当前模式, 1 代表上传文件模式, 2 代表展示分析结果模式
         videoMD5: "", // 已上传的 video 文件的MD5值
         uploadTotal: 1, // 文件总大小
-        uploadLoaded: 0 // 当前已上传的大小
+        uploadLoaded: 0, // 当前已上传的大小
+        uploadMaskOpen: false //mask的上传按钮
     },
     computed: {
         progress: function() {
@@ -37,7 +44,7 @@ var app = new Vue({
                 if (res.data.length === 32) {
                     this.videoMD5 = res.data;
                     this.fileWarning = "正在分析文件中...请稍后...";
-                    setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 60000)
+                    setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000)
                 } else {
                     alert(res.data);
                 }
@@ -54,11 +61,30 @@ var app = new Vue({
             this.$http.post('/data/checkAnalyse', { videoMD5: videoMD5 }).then(function(res) {
 
                 // 如果返回的数据是 -1, 就说明还没有分析完
-                if (res.data === "-1") {
-                    console.log(1);
-                    return setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 60000);
+                if (res.data === "1" || res.data === "3") {
+                    console.log("not end!");
+                    return setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000);
+                } else if (res.data === "-1") {
+                    console.log("the python wrong error");
+                } else if (res.data === "2") {
+                    that.fileWarning = "显示第一帧图像";
+                    that.currentState = 2;
+                    that.uploadMaskOpen = true;
+                    canvas = $('#interact');
+                    context = document.getElementById('interact').getContext('2d');
+                    bindEvent();
+                    var img = $(new Image());
+                    img.attr("src", resultpath + `${videoMD5}.mp4.jpg`);
+                    img.load(function() {
+                        canvas.attr("width", img.get(0).width);
+                        canvas.attr("height", img.get(0).height);
+                        context.drawImage(img.get(0), 0, 0);
+                        context.strokeStyle = "#000000";
+                        context.lineJoin = "round";
+                        context.lineWidth = 2;
+                    })
                 } else {
-                    console.log("hahaha");
+                    console.log("the process is end!");
                 }
             }, function(err) {
                 console.log(err);
@@ -75,7 +101,7 @@ var app = new Vue({
 
 
             // 检查是否为 video 文件
-            if (fileName.indexOf(".bmp") === -1) {
+            if (fileName.indexOf(".mp4") === -1) {
                 this.fileWarning = "上传的文件必须是 mp4 文件!";
                 this.uploadOpen = false;
                 return;
@@ -86,10 +112,67 @@ var app = new Vue({
             this.uploadOpen = true;
         },
 
-        reUploadFile: function() {
-            this.fileWarning = "";
-            this.uploadOpen = false;
-            this.currentState = 1;
+        uploadMask: function() {
+            var that = this;
+            this.uploadMaskOpen = false;
+            var mask = new Array();
+            for (var i = 0; i < parseInt(canvas.attr("height")); i++) {
+                mask[i] = new Array();
+                for (var j = 0; j < parseInt(canvas.attr("width")); j++) {
+                    mask[i][j] = 0;
+                }
+            }
+            var data = context.getImageData(0, 0, parseInt(canvas.attr("width")), parseInt(canvas.attr("height"))).data;
+            for (var i = 0; i < data.length; i += 4) {
+                if (data[i] == 0 && data[i + 1] == 0 && data[i + 2] == 0) {
+                    mask[parseInt((i / 4) / parseInt(canvas.attr("width")))][(i / 4) % parseInt(canvas.attr("width"))] = 1;
+                }
+            }
+
+            this.$http.post('/data/getMask', { mask: mask }).then(function(res) {
+                setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000);
+            })
         }
     }
 })
+
+
+function bindEvent() {
+    var paint = false;
+
+    canvas.mousedown(function(e) {
+        if (app.currentState == 2) {
+            context.save();
+            var mouseX = e.pageX - this.offsetLeft;
+            var mouseY = e.pageY - this.offsetTop;
+            context.beginPath();
+            context.moveTo(mouseX, mouseY);
+            context.stroke();
+            paint = true;
+            context.restore();
+        }
+    });
+
+    canvas.mousemove(function(e) {
+        if (app.currentState == 2) {
+            if (paint) { //是不是按下了鼠标
+                var mouseX = e.pageX - this.offsetLeft;
+                var mouseY = e.pageY - this.offsetTop;
+                context.lineTo(mouseX, mouseY);
+                context.stroke();
+            }
+        }
+    });
+
+    canvas.mouseup(function(e) {
+        if (app.currentState == 2) {
+            paint = false;
+        }
+    });
+
+    canvas.mouseleave(function(e) {
+        if (app.currentState == 2) {
+            paint = false;
+        }
+    });
+}

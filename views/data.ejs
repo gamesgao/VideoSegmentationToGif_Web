@@ -33,23 +33,31 @@
             <!--/.nav-collapse -->
         </div>
     </div>
-    <div class="container" id="selector" v-if="currentState === 1">
-        <div class="row">
-            <form>
-                <div class="form-group">
-                    <label for="videoFile">选择文件</label>
-                    <input type="file" name="file" id="videoFile" v-on:change="checkFileName()">
-                    <label for="submitBtn"></label>
-                    <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary" v-on:click="uploadFile()">确认上传</button>
-                    <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
-                    <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
-                </div>
-            </form>
+    <div id="selector">
+        <div class="container" v-if="currentState === 1">
+            <div class="row">
+                <form>
+                    <div class="form-group">
+                        <label for="videoFile">选择文件</label>
+                        <input type="file" name="file" id="videoFile" v-on:change="checkFileName()">
+                        <label for="submitBtn"></label>
+                        <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary" v-on:click="uploadFile()">确认上传</button>
+                        <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
+                        <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <canvas id="interact" width="0" height="0"></canvas>
+                <button v-if="uploadMaskOpen" id="submitMaskBtn" class="btn btn-primary" v-on:click="uploadMask()">确认结果</button>
+            </div>
         </div>
     </div>
-    <script src="/javascripts/bind/data.js"></script>
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="/javascripts/bind/data.js"></script>
 </body>
 
 </html>
