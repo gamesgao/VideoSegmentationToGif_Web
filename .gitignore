@@ -37,11 +37,15 @@ jspm_packages
 .node_repl_history
 
 #image
-.bmp
-.jpg
+*.bmp
+*.jpg
+*.gif
 
 #video
-.mp4
+*.mp4
 
 #python
-.pyc
+*.pyc
+
+#test
+test.*
