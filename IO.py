@@ -6,6 +6,7 @@ from video import *
 import json
 import time
 from images2gif import writeGif
+import imageio
 
 
 def readVideo(path):
@@ -26,12 +27,12 @@ def readVideo(path):
     ret, frame = cap.read()
     ret, frame = cap.read()
     # while(ret):
-    for i in range(2):
+    for i in range(5):
         result.addFrame(frame)
         ret, frame = cap.read()
         ret, frame = cap.read()
-        ret, frame = cap.read()
-        ret, frame = cap.read()
+        # ret, frame = cap.read()
+        # ret, frame = cap.read()
 
     cap.release()
     return result
@@ -66,7 +67,7 @@ def readFlowVideo(path):
     ret, frame = cap.read()
     # prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # while (ret):
-    for i in range(2):
+    for i in range(5):
         nextFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # cv2.imshow(windowName, frame)
         result.addFrame(cv2.calcOpticalFlowFarneback(prevFrame,
@@ -78,8 +79,8 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        ret, frame = cap.read()
-        ret, frame = cap.read()
+        # ret, frame = cap.read()
+        # ret, frame = cap.read()
         ret, frame = cap.read()
         ret, frame = cap.read()
         prevFrame = nextFrame
@@ -148,8 +149,9 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
         # coloredLabels
         cv2.imwrite(str(path) + '.' + str(t) + '.jpg', coloredLabels)
         if (distill):
-            gif.append(np.copy(coloredLabels))
+            gif.append(coloredLabels[:])
     if (distill):
-        writeGif("gif.gif", gif, duration=0.5, subRectangles=False)
+        #writeGif("gif.gif", gif, duration=1, subRectangles = False)
+        imageio.mimsave('movie.gif', gif)
 
     return t

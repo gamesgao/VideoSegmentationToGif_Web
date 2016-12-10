@@ -59,13 +59,13 @@ function checkAnalyse(req, res, next) {
 function getMask(req, res, next) {
     var mask = req.body.mask;
     childProcessFlag = 3;
-    console.log(mask.length);
-    console.log(mask[0].length);
-    for (var i = mask.length - 1; i >= 0; i--) {
-        for (var j = mask[i].length - 1; j >= 0; j--) {
-            if (mask[i][j] == 1) console.log(`(${i}.${j})`);
-        }
-    }
+    // console.log(mask.length);
+    // console.log(mask[0].length);
+    // for (var i = mask.length - 1; i >= 0; i--) {
+    //     for (var j = mask[i].length - 1; j >= 0; j--) {
+    //         if (mask[i][j] == 1) console.log(`(${i}.${j})`);
+    //     }
+    // }
     // fs.writeFile('1.txt', JSON.stringify(mask));
     child.stdin.write(JSON.stringify(mask));
     child.stdin.end();
