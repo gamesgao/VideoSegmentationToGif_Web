@@ -7,7 +7,7 @@ import IO
 from graph_segmentation import *
 
 if len(sys.argv) == 1:
-    readSource = '13.mp4'
+    source = readSource = '13.mp4'
 else:
     source = sys.argv[1]
 # groundTruth = False
