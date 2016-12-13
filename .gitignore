@@ -1,7 +1,3 @@
-#imageio
-!imageio
-!imageio/*
-
 # Logs
 logs
 *.log
@@ -47,6 +43,7 @@ jspm_packages
 
 #video
 *.mp4
+!13.mp4
 
 #python
 *.pyc
