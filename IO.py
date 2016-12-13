@@ -5,7 +5,6 @@ import sys
 from video import *
 import json
 import time
-from images2gif import writeGif
 import imageio
 
 
