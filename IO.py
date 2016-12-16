@@ -30,8 +30,8 @@ def readVideo(path):
         result.addFrame(frame)
         ret, frame = cap.read()
         ret, frame = cap.read()
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
 
     cap.release()
     return result
@@ -78,8 +78,8 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
         ret, frame = cap.read()
         ret, frame = cap.read()
         prevFrame = nextFrame
