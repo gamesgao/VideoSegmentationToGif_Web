@@ -28,7 +28,7 @@ def readVideo(path):
     ret, frame = cap.read()
     ret, frame = cap.read()
     # while(ret):
-    for i in range(10):
+    for i in range(5):
         result.addFrame(frame)
         # ret, frame = cap.read()
         # ret, frame = cap.read()
@@ -68,7 +68,7 @@ def readFlowVideo(path):
     ret, frame = cap.read()
     # prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # while (ret):
-    for i in range(10):
+    for i in range(5):
         nextFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # cv2.imshow(windowName, frame)
         result.addFrame(cv2.calcOpticalFlowFarneback(prevFrame,
