@@ -30,7 +30,7 @@ def readVideo(path):
     # while(ret):
     for i in range(5):
         result.addFrame(frame)
-        for i in range(10)：
+        for i in range(1)：
             ret, frame = cap.read()
 
     cap.release()
@@ -51,12 +51,12 @@ def readFlowVideo(path):
     # frameNunber = 0
     prevFrame = None
     pyramidScale = 0.5
-    pyramidLevels = 3
+    pyramidLevels = 7
     windowSize = 15
-    iterations = 3
+    iterations = 7
     polynomialNeighborhoodSize = 5
     polynomialSigma = 1.2
-    flags = cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
+    flags = cv2.OPTFLOW_FARNEBACK_GAUSSIAN #cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
 
     ret, frame = cap.read()
     ret, frame = cap.read()
@@ -78,7 +78,7 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        for i in range(10)：
+        for i in range(1)：
             ret, frame = cap.read()
         prevFrame = nextFrame
 
