@@ -28,11 +28,11 @@ def readVideo(path):
     ret, frame = cap.read()
     ret, frame = cap.read()
     # while(ret):
-    for i in range(5):
+    for i in range(25):
         result.addFrame(frame)
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
         ret, frame = cap.read()
 
     cap.release()
@@ -68,7 +68,7 @@ def readFlowVideo(path):
     ret, frame = cap.read()
     # prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # while (ret):
-    for i in range(5):
+    for i in range(25):
         nextFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # cv2.imshow(windowName, frame)
         result.addFrame(cv2.calcOpticalFlowFarneback(prevFrame,
@@ -80,9 +80,9 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
-        # ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
+        ret, frame = cap.read()
         ret, frame = cap.read()
         prevFrame = nextFrame
 
