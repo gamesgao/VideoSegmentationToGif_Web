@@ -22,18 +22,16 @@ def readVideo(path):
 
     result = Video()
     # ret, frame = cap.read()
-    # ret, frame = cap.read()
-    # ret, frame = cap.read()
-    # ret, frame = cap.read()
+    ret, frame = cap.read()
+    ret, frame = cap.read()
+    ret, frame = cap.read()
     ret, frame = cap.read()
     ret, frame = cap.read()
     # while(ret):
     for i in range(5):
         result.addFrame(frame)
-        ret, frame = cap.read()
-        ret, frame = cap.read()
-        ret, frame = cap.read()
-        ret, frame = cap.read()
+        for i in range(10)：
+            ret, frame = cap.read()
 
     cap.release()
     return result
@@ -60,9 +58,9 @@ def readFlowVideo(path):
     polynomialSigma = 1.2
     flags = cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
 
-    # ret, frame = cap.read()
-    # ret, frame = cap.read()
-    # ret, frame = cap.read()
+    ret, frame = cap.read()
+    ret, frame = cap.read()
+    ret, frame = cap.read()
     ret, frame = cap.read()
     prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     ret, frame = cap.read()
@@ -80,10 +78,8 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        ret, frame = cap.read()
-        ret, frame = cap.read()
-        ret, frame = cap.read()
-        ret, frame = cap.read()
+        for i in range(10)：
+            ret, frame = cap.read()
         prevFrame = nextFrame
 
         # print flows
