@@ -30,7 +30,7 @@ def readVideo(path):
     # while(ret):
     for i in range(5):
         result.addFrame(frame)
-        for i in range(1)：
+        for i in range(1):
             ret, frame = cap.read()
 
     cap.release()
