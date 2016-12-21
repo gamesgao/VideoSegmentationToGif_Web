@@ -78,7 +78,7 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        for i in range(1)：
+        for i in range(1):
             ret, frame = cap.read()
         prevFrame = nextFrame
 
