@@ -10,7 +10,7 @@ import cv2
 import imageio
 from video import *
 
-skipFrame = 3
+skipFrame = 4
 readFrame = 5
 skipfirstFrame = 5
 
