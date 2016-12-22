@@ -12,7 +12,7 @@ from video import *
 
 skipFrame = 5
 readFrame = 5
-skipfirstFrame = 5
+skipfirstFrame = 40
 
 
 def readVideo(path):
