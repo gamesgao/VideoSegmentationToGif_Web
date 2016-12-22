@@ -9,7 +9,9 @@ import cv2
 import imageio
 from video import *
 
-
+skipFrame = 5
+readFrame = 5
+skipfirstFrame = 5
 
 
 def readVideo(path):
@@ -24,16 +26,15 @@ def readVideo(path):
 
     result = Video()
     # ret, frame = cap.read()
-    ret, frame = cap.read()
-    ret, frame = cap.read()
-    ret, frame = cap.read()
-    ret, frame = cap.read()
+    for i in range(skipfirstFrame):
+        ret, frame = cap.read()
     ret, frame = cap.read()
     # while(ret):
-    for i in range(5):
+    for i in range(readFrame):
         result.addFrame(frame)
-        for i in range(5):
+        for i in range(skipFrame):
             ret, frame = cap.read()
+        ret, frame = cap.read()
 
     cap.release()
     return result
@@ -60,15 +61,14 @@ def readFlowVideo(path):
     polynomialSigma = 1.2
     flags = cv2.OPTFLOW_FARNEBACK_GAUSSIAN #cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
 
-    ret, frame = cap.read()
-    ret, frame = cap.read()
-    ret, frame = cap.read()
+    for i in range(skipfirstFrame-1):
+        ret, frame = cap.read()
     ret, frame = cap.read()
     prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     ret, frame = cap.read()
     # prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # while (ret):
-    for i in range(5):
+    for i in range(readFrame):
         nextFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # cv2.imshow(windowName, frame)
         result.addFrame(cv2.calcOpticalFlowFarneback(prevFrame,
@@ -80,7 +80,7 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        for i in range(5):
+        for i in range(skipFrame):
             ret, frame = cap.read()
         prevFrame = nextFrame
 
