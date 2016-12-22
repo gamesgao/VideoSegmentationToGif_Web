@@ -56,11 +56,11 @@ def readFlowVideo(path):
     # frameNunber = 0
     prevFrame = None
     pyramidScale = 0.5
-    pyramidLevels = 7
-    windowSize = 15
-    iterations = 7
+    pyramidLevels = 1
+    windowSize = 7
+    iterations = 10
     polynomialNeighborhoodSize = 5
-    polynomialSigma = 1.2
+    polynomialSigma = 1.1
     flags = cv2.OPTFLOW_FARNEBACK_GAUSSIAN #cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
 
     for i in range(skipfirstFrame-1):
