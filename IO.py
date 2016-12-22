@@ -10,6 +10,8 @@ import imageio
 from video import *
 
 
+
+
 def readVideo(path):
     if len(path) == 0:
         cap = cv2.VideoCapture('1.MOV')
@@ -30,7 +32,7 @@ def readVideo(path):
     # while(ret):
     for i in range(5):
         result.addFrame(frame)
-        for i in range(1):
+        for i in range(5):
             ret, frame = cap.read()
 
     cap.release()
@@ -78,7 +80,7 @@ def readFlowVideo(path):
                                                      polynomialNeighborhoodSize,
                                                      polynomialSigma,
                                                      flags))
-        for i in range(1):
+        for i in range(5):
             ret, frame = cap.read()
         prevFrame = nextFrame
 
