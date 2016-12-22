@@ -1,6 +1,7 @@
-import cv2
 import sys
 import time
+
+import cv2
 
 if len(sys.argv) == 1:
     source = 'test.bmp'

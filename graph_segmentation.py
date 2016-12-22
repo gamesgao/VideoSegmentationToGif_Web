@@ -1,11 +1,12 @@
 from __future__ import division
-from video_graph import *
+
 import math
 import random
 import sys
-import numpy as np
-import cv2.cv as cv
+
 from video import *
+from video_graph import *
+
 
 class GraphSegmentationDistance:
     def __init__(self):
@@ -38,9 +39,10 @@ class GraphSegmentationManhattenRGB(GraphSegmentationDistance):
 class GraphSegmentationEuclideanRGB(GraphSegmentationDistance):
     def __init__(self):
         GraphSegmentationDistance.__init__(self)
-    # Normalization.
+        # Normalization.
         self.__D = math.sqrt(255 * 255 + 255 * 255 + 255 * 255)
-    #Evaluate the distance given 2 nodes.
+
+    # Evaluate the distance given 2 nodes.
     def __call__(self, n, m):
         dr = n.r - m.r
         dg = n.g - m.g
@@ -53,7 +55,7 @@ class GraphSegmentationEuclideanRGBFlowAngle(GraphSegmentationDistance):
         GraphSegmentationDistance.__init__(self)
         self._weights.append(alpha)
         self._weights.append(beta)
-        self.__D = math.sqrt(255*255 + 255*255 + 255*255)
+        self.__D = math.sqrt(255 * 255 + 255 * 255 + 255 * 255)
         pass
 
     def __call__(self, n, m):
@@ -65,14 +67,15 @@ class GraphSegmentationEuclideanRGBFlowAngle(GraphSegmentationDistance):
             # Use flow within frames.
             n_f = math.sqrt(n.fx * n.fx + n.fy * n.fy)
             m_f = math.sqrt(m.fx * m.fx + m.fy * m.fy)
-            # if (n_f * m_f >= 1e-4):
-            cos_a = min(1.0, max(-1.0, (float)(n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
-            # else:
-            #     cos_a = 1
+            if n_f * m_f >= 1e-6:
+                cos_a = min(1.0, max(-1.0, float(n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
+            else:
+                cos_a = 1
             a = math.acos(cos_a)
             pi = math.pi + 1e-4
-            assert (a >= 0 and a <= pi)
-            return self._weights[0] * math.sqrt(dr * dr + dg * dg + db * db) / float(self.__D) + self._weights[1] * a / math.pi
+            assert (0 <= a <= pi)
+            return self._weights[0] * math.sqrt(dr * dr + dg * dg + db * db) / float(self.__D) + self._weights[
+                                                                                                     1] * a / math.pi
         else:
             return math.sqrt(dr * dr + dg * dg + db * db) / self.__D
 
@@ -89,17 +92,17 @@ class GraphSegmentationMagic:
 
 
 class GraphSegmentationMagicSimpleThreshold(GraphSegmentationMagic):
-
-    def __init__(self,_c):
+    def __init__(self, _c):
         GraphSegmentationMagic.__init__(self)
         self.__c = _c
 
-    def __call__(self,S_n,S_m,e):
+    def __call__(self, S_n, S_m, e):
         # threshold = min(S_n.max_w + self.__c / S_n.n, S_m.max_w + self.__c / S_m.n)
         if e.w < self.__c:
             return True
         else:
             return False
+
 
 class GraphSegmentationMagicThreshold(GraphSegmentationMagic):
     def __init__(self, _c):
@@ -108,15 +111,14 @@ class GraphSegmentationMagicThreshold(GraphSegmentationMagic):
 
     def __call__(self, S_n, S_m, e):
         threshold = min((S_n.max_w + self.__c / S_n.n), (S_m.max_w + self.__c / S_m.n))
-        if (e.w < threshold):
+        if e.w < threshold:
             return True
         else:
             return False
 
 
 class GraphSegmentationHierarchyDistance:
-
-    #Constructs a distance without weights.
+    # Constructs a distance without weights.
     def __init__(self):
         self._weights = []
         pass
@@ -124,18 +126,18 @@ class GraphSegmentationHierarchyDistance:
     def __del__(self):
         pass
 
-    #Assignment operator
+    # Assignment operator
     def __eq__(self, hdistance):
         self._weights = hdistance._weights
 
-    #Evaluate the distance given 2 nodes.
+        # Evaluate the distance given 2 nodes.
 
 
 class GraphSegmentationHierarchyRGBChiSquare(GraphSegmentationHierarchyDistance):
     def __init__(self):
         GraphSegmentationHierarchyDistance.__init__(self)
 
-    #Evaluate the distance given 2 nodes.
+    # Evaluate the distance given 2 nodes.
     def __call__(self, n, m):
         assert (n.H == m.H)
         assert (n.n > 0 and m.n > 0)
@@ -151,11 +153,12 @@ class GraphSegmentationHierarchyRGBChiSquare(GraphSegmentationHierarchyDistance)
 
 
 class GraphSegmentationHierarchyRGBChiSquareFlowAngle(GraphSegmentationHierarchyDistance):
-    def __init__(self,alpha, gamma):
+    def __init__(self, alpha, gamma):
         GraphSegmentationHierarchyDistance.__init__(self)
         self._weights.append(alpha)
         self._weights.append(gamma)
-    #Evaluate the distance given 2 nodes.
+
+    # Evaluate the distance given 2 nodes.
     def __call__(self, n, m):
         assert (len(self._weights) == 2)
         assert (n.H == m.H)
@@ -170,19 +173,19 @@ class GraphSegmentationHierarchyRGBChiSquareFlowAngle(GraphSegmentationHierarchy
                 distance += (n_h - m_h) * (n_h - m_h) / (n_h + m_h)
 
         if (n.t == m.t):
-        # Use flow cues only within frame.
+            # Use flow cues only within frame.
             n_f = math.sqrt(n.fx * n.fx + n.fy * n.fy)
             m_f = math.sqrt(m.fx * m.fx + m.fy * m.fy)
-            # if ((n_f * m_f)>=1e-4):
-            cos_a = min(1.0, max(-1.0, (n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
-            # else:
-            #     cos_a = 1
+            if ((n_f * m_f)>=1e-6):
+                cos_a = min(1.0, max(-1.0, (n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
+            else:
+                cos_a = 1
             a = math.acos(cos_a)
             pi = math.pi + 1e-4
             assert (a >= 0 and a <= pi)
             return self._weights[0] * distance + self._weights[1] * a / pi
         else:
-            #Only color cues.
+            # Only color cues.
             return distance
 
 
@@ -194,17 +197,18 @@ class GraphSegmentationHierarchyMagic:
         pass
 
 
-    #Go up alevel, that is raise the threshold.
+        # Go up alevel, that is raise the threshold.
 
-    #Decide whether to merge these two components or not.
+        # Decide whether to merge these two components or not.
 
 
 class GraphSegmentationHierarchyMagicSimpleThreshold(GraphSegmentationHierarchyMagic):
-    def __init__(self, _c, _r = 2):
+    def __init__(self, _c, _r=2):
         GraphSegmentationHierarchyMagic.__init__(self)
         self.__c = _c
         self.__r = _r
-    #Go up alevel, that is raise the threshold.
+
+    # Go up alevel, that is raise the threshold.
     def Raise(self):
         self.__c *= self.__r
 
@@ -215,7 +219,7 @@ class GraphSegmentationHierarchyMagicSimpleThreshold(GraphSegmentationHierarchyM
 
 
 class GraphSegmentationHierarchyMagicThreshold(GraphSegmentationHierarchyMagic):
-    def __init__(self, _c, _r = 2):
+    def __init__(self, _c, _r=2):
         GraphSegmentationHierarchyMagic.__init__(self)
         self.__c = _c
         self.__r = _r
@@ -223,7 +227,7 @@ class GraphSegmentationHierarchyMagicThreshold(GraphSegmentationHierarchyMagic):
     def Raise(self):
         self.__c *= self.__r
 
-    #decide whether to merge these two components or not.
+    # decide whether to merge these two components or not.
     def __call__(self, S_n, S_m, e):
         threshold = min(S_n.max_w + self.__c / S_n.n, S_m.max_w + self.__c / S_m.n)
         if (e.w < threshold):
@@ -244,27 +248,30 @@ class GraphSegmentationRandomnessNone(GraphSegmentationRandomness):
     def __call__(self, e):
         return True
 
+
 class GraphSegmentationRandomnessSimple(GraphSegmentationRandomness):
     def __init__(self, _p):
         GraphSegmentationRandomness.__init__(self)
         self.__p = _p
 
     def __call__(self, e):
-        #float
+        # float
         r = random.random
         if (r <= self.__p):
             return True
         else:
             return False
 
+
 class GraphSegmentation:
-    def __init__(self, _distance = GraphSegmentationManhattenRGB(), _magic = GraphSegmentationMagicThreshold(25), _random = GraphSegmentationRandomnessNone()):
+    def __init__(self, _distance=GraphSegmentationManhattenRGB(), _magic=GraphSegmentationMagicThreshold(25),
+                 _random=GraphSegmentationRandomnessNone()):
         self.__distance = _distance
         self.__magic = _magic
         self.__random = _random
-        #self.__hdistance = 0
+        # self.__hdistance = 0
         self.__hdistance = None
-        #self.__hmagic = GraphSegmentationMagic(0)
+        # self.__hmagic = GraphSegmentationMagic(0)
         self.__hmagic = None
         self.__T = None
         self.__H = None
@@ -303,8 +310,7 @@ class GraphSegmentation:
         self.__W = video.getFrameWidth()
 
         self.__N = self.__T * self.__H * self.__W
-        self.__graph = VideoGraph(N = self.__N)
-
+        self.__graph = VideoGraph(N=self.__N)
 
         for t in range(self.__T):
             for i in range(self.__H):
@@ -326,15 +332,14 @@ class GraphSegmentation:
                     #     denominator = -2147483648
                     # else:
                     denominator = math.ceil(256. / ((float)(node.H / 3.0)))
-                    #int
+                    # int
                     h_b = int(node.b / denominator)
-                    #int
+                    # int
                     h_g = int(node.g / denominator)
-                    #int
+                    # int
                     h_r = int(node.r / denominator)
 
-
-                    #node.h = std::vector < int > (node.H, 0);
+                    # node.h = std::vector < int > (node.H, 0);
                     node.h = [0] * node.H
 
                     node.h[h_b] += 1
@@ -342,7 +347,7 @@ class GraphSegmentation:
                     node.h[h_r] += 1
 
                     # Flow.
-                    #if (t < T - 1)
+                    # if (t < T - 1)
                     node.fx = flow.get(t, i, j)[0]
                     node.fy = flow.get(t, i, j)[1]
                     node.f = math.sqrt(node.fx * node.fx + node.fy * node.fy)
@@ -359,8 +364,8 @@ class GraphSegmentation:
                     assert (self.__graph.getNode(n).id == n)
 
     def buildEdges(self):
-        assert(self.__graph.getNumNodes() > 0)
-        #int
+        assert (self.__graph.getNumNodes() > 0)
+        # int
         invalid = 0
         # Now add all edges and weights.
         for t in range(self.__T):
@@ -370,12 +375,12 @@ class GraphSegmentation:
                     n = int(self.__H * self.__W * t + self.__W * i + j)
                     node = self.__graph.getNode(n)
                     if (t < self.__T - 1):
-                        #int
+                        # int
                         k = int(i + node.fy)
-                        #int
+                        # int
                         l = int(j + node.fx)
                         if (k >= 0 and k < self.__H and l >= 0 and l < self.__W):
-                            #int
+                            # int
                             m = int(self.__H * self.__W * (t + 1) + self.__W * k + l)
                             other = self.__graph.getNode(m)
 
@@ -390,7 +395,7 @@ class GraphSegmentation:
                         else:
                             invalid += 1
                     if (i < self.__H - 1):
-                        #int
+                        # int
                         m = int(self.__H * self.__W * t + self.__W * (i + 1) + j)
                         other = self.__graph.getNode(m)
                         assert (m == other.id)
@@ -402,7 +407,7 @@ class GraphSegmentation:
                         self.__graph.addEdge(edge)
 
                     if (j < self.__W - 1):
-                        #int
+                        # int
                         m = int(self.__H * self.__W * t + self.__W * i + (j + 1))
                         other = self.__graph.getNode(m)
                         assert (m == other.id)
@@ -417,29 +422,29 @@ class GraphSegmentation:
         assert (self.__graph.getNumNodes() > 0)
         assert (self.__graph.getNumEdges() > 0)
 
-        #int
+        # int
         N = self.__graph.getNumNodes()
-        #int
+        # int
         E = self.__graph.getNumEdges()
 
         # Sort edges.
         self.__graph.sortEdges()
 
         for e in range(E):
-            #VideoEdge
+            # VideoEdge
             edge = self.__graph.getEdge(e)
             if self.__random(edge):
-                #VideoNode
+                # VideoNode
                 n = self.__graph.getNode(edge.n)
-                #VideoNode
+                # VideoNode
                 m = self.__graph.getNode(edge.m)
-                #VideoNode
+                # VideoNode
                 S_n = self.__graph.findNodeComponent(n)
-                #VideoNode
+                # VideoNode
                 S_m = self.__graph.findNodeComponent(m)
                 # Are the nodes in different components?
                 if (S_m.id != S_n.id):
-                # Here comes the magic!
+                    # Here comes the magic!
                     if (self.__magic)(S_n, S_m, edge):
                         self.__graph.merge(S_n, S_m, edge)
 
@@ -450,25 +455,25 @@ class GraphSegmentation:
     def enforceMinimumSegmentSize(self, M):
         assert (self.__graph.getNumNodes() > 0)
         # assert (graph.getNumEdges() > 0)
-        #int
+        # int
         N = self.__graph.getNumNodes()
-        #int
+        # int
         E = self.__graph.getNumEdges()
         for e in range(E):
-            #VideoEdge
+            # VideoEdge
             edge = self.__graph.getEdge(e)
             if (not edge.r):
-                #VideoNode
+                # VideoNode
                 n = self.__graph.getNode(edge.n)
-                #VideoNode
+                # VideoNode
                 m = self.__graph.getNode(edge.m)
-                #VideoNode
+                # VideoNode
                 S_n = self.__graph.findNodeComponent(n)
-                #VideoNode
+                # VideoNode
                 S_m = self.__graph.findNodeComponent(m)
 
-                if (S_n.l != S_m.l):
-                    if (S_n.n < M or S_m.n < M):
+                if S_n.l != S_m.l:
+                    if S_n.n < M or S_m.n < M:
                         self.__graph.merge(S_n, S_m, edge)
 
                 else:
@@ -480,64 +485,64 @@ class GraphSegmentation:
         assert (self.__graph.getNumEdges() > 0)
         assert (self.__hdistance != 0)
         assert (self.__hmagic != 0)
-        #int
+        # int
         N = self.__graph.getNumNodes()
-        #int
+        # int
         E = self.__graph.getNumEdges()
         # Some minor checks and resets.
         for n in range(N):
-            #VideoNode
+            # VideoNode
             node = self.__graph.getNode(n)
             node.max_w = 0
 
         for e in range(E):
-            #VideoEdge
+            # VideoEdge
             edge = self.__graph.getEdge(e)
 
-            if (not edge.r):
-                #VideoNode
+            if not edge.r:
+                # VideoNode
                 n = self.__graph.getNode(edge.n)
-                #VideoNode
+                # VideoNode
                 m = self.__graph.getNode(edge.m)
 
-                #VideoNode
+                # VideoNode
                 S_n = self.__graph.findNodeComponent(n)
-                #VideoNode
+                # VideoNode
                 S_m = self.__graph.findNodeComponent(m)
 
-                if (S_n.l != S_m.l):
-                    edge.w = (self.__hdistance)(S_n, S_m)
+                if S_n.l != S_m.l:
+                    edge.w = self.__hdistance(S_n, S_m)
                 else:
                     # This edge has already been merged.
                     edge.r = True
 
     def addHierarchyLevel(self):
-        assert(self.__graph.getNumNodes() > 0)
+        assert (self.__graph.getNumNodes() > 0)
         # assert (graph.getNumEdges() > 0);
 
         assert (self.__hdistance != 0)
         assert (self.__hmagic != 0)
         self.__hmagic.Raise()
 
-        #int
+        # int
         N = self.__graph.getNumNodes()
-        #int
+        # int
         E = self.__graph.getNumEdges()
 
         for e in range(E):
-            #VideoEdge
+            # VideoEdge
             edge = self.__graph.getEdge(e)
 
             if self.__random(edge):
                 if (not edge.r):
-                    #VideoNode
+                    # VideoNode
                     n = self.__graph.getNode(edge.n)
-                    #VideoNode
+                    # VideoNode
                     m = self.__graph.getNode(edge.m)
 
-                    #VideoNode
+                    # VideoNode
                     S_n = self.__graph.findNodeComponent(n)
-                    #VideoNode
+                    # VideoNode
                     S_m = self.__graph.findNodeComponent(m)
 
                     # Are the nodes in different components?
@@ -551,21 +556,21 @@ class GraphSegmentation:
 
     def deriveLabels(self):
         assert (self.__graph.getNumNodes() > 0)
-        #// assert (graph.getNumEdges() > 0);
-        #SegmentationVideo
+        # // assert (graph.getNumEdges() > 0);
+        # SegmentationVideo
         video = SegmentationVideo()
         for t in range(self.__T):
-            #cv::Mat frame(H, W, CV_32SC1, cv::Scalar(0))
-            #intersectionMatrix \
+            # cv::Mat frame(H, W, CV_32SC1, cv::Scalar(0))
+            # intersectionMatrix \
             frame = np.zeros((self.__H, self.__W), np.int32)
             for i in range(self.__H):
                 for j in range(self.__W):
-                    #int
+                    # int
                     n = int(self.__H * self.__W * t + self.__W * i + j)
 
-                    #VideoNode
+                    # VideoNode
                     node = self.__graph.getNode(n)
-                    #VideoNode
+                    # VideoNode
                     S_node = self.__graph.findNodeComponent(node)
                     max = sys.maxint
                     assert (S_node.id <= max)

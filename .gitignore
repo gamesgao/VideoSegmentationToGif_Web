@@ -51,3 +51,6 @@ jspm_packages
 #test
 test.*
 
+#idea
+.idea
+

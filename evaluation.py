@@ -1,6 +1,6 @@
 import math
-import numpy as np
 
+import numpy as np
 
 
 def isSpatialBoundaryPixel(video, t, i, j):

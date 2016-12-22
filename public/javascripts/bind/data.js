@@ -1,7 +1,7 @@
 var canvas;
 var context;
 var resultpath = "/images/result/";
-
+var timeIntervalForCheck = 5000;
 
 
 var app = new Vue({
@@ -13,7 +13,9 @@ var app = new Vue({
         videoMD5: "", // 已上传的 video 文件的MD5值
         uploadTotal: 1, // 文件总大小
         uploadLoaded: 0, // 当前已上传的大小
-        uploadMaskOpen: false //mask的上传按钮
+        uploadMaskOpen: false, //mask的上传按钮
+        gifShow: false, //gif图片是否已经显示
+        gifPath: "" //gif文件路径
     },
     computed: {
         progress: function() {
@@ -21,6 +23,9 @@ var app = new Vue({
         }
     },
     methods: {
+        chooseFile: function() {
+            $('#videoFile')[0].click();
+        },
         uploadFile: function() {
             var file = document.getElementById("videoFile").files[0];
 
@@ -44,7 +49,7 @@ var app = new Vue({
                 if (res.data.length === 32) {
                     this.videoMD5 = res.data;
                     this.fileWarning = "正在分析文件中...请稍后...";
-                    setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000)
+                    setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck)
                 } else {
                     alert(res.data);
                 }
@@ -63,7 +68,7 @@ var app = new Vue({
                 // 如果返回的数据是 -1, 就说明还没有分析完
                 if (res.data === "1" || res.data === "3") {
                     console.log("not end!");
-                    return setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000);
+                    return setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck);
                 } else if (res.data === "-1") {
                     console.log("the python wrong error");
                 } else if (res.data === "2") {
@@ -84,6 +89,8 @@ var app = new Vue({
                         context.lineWidth = 2;
                     })
                 } else {
+                    this.gifPath = resultpath + `${videoMD5}.mp4.gif`;
+                    this.gifShow = true;
                     console.log("the process is end!");
                 }
             }, function(err) {
@@ -130,7 +137,7 @@ var app = new Vue({
             }
 
             this.$http.post('/data/getMask', { mask: mask }).then(function(res) {
-                setTimeout(function() { that.checkAnalyse(that.videoMD5); }, 1000);
+                setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck);
             })
         }
     }

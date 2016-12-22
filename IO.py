@@ -1,15 +1,16 @@
+from __future__ import print_function
+
 import json
 import random
 import sys
 import time
 
-import numpy as np
-
 import cv2
+
 import imageio
 from video import *
 
-skipFrame = 5
+skipFrame = 3
 readFrame = 5
 skipfirstFrame = 5
 
@@ -21,10 +22,11 @@ def readVideo(path):
         cap = cv2.VideoCapture(path)
 
     if not cap.isOpened():
-        print 'Cannot initialize video capture'
+        print('Cannot initialize video capture')
         sys.exit(-1)
 
     result = Video()
+    readFrame = int((cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)-skipfirstFrame)/(skipFrame+1))
     # ret, frame = cap.read()
     for i in range(skipfirstFrame):
         ret, frame = cap.read()
@@ -44,9 +46,9 @@ def readFlowVideo(path):
     result = FlowVideo()
 
     cap = cv2.VideoCapture(path)
-
+    readFrame = int((cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT) - skipfirstFrame) / (skipFrame + 1))
     if not cap.isOpened():
-        print 'Cannot initialize video capture'
+        print('Cannot initialize video capture')
         sys.exit(-1)
 
     # the parameter for Optical Flow
@@ -118,12 +120,12 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
             sys.stdout.flush()
             sys.stdout.flush()
             time.sleep(1)
-            print "409"
+            print ("409")
             sys.stdout.flush()
             name = raw_input("")
             fig = json.loads(name)
-            print "fig width"+str(len(fig))
-            print "fig h"+str(len(fig[0]))
+            print ("fig width" + str(len(fig)))
+            print ("fig h" + str(len(fig[0])))
             for i in range(len(labels)):
                 for j in range(len(labels[i])):
                     if (fig[i][j] == 1):
