@@ -61,7 +61,7 @@ def readFlowVideo(path):
     iterations = 10
     polynomialNeighborhoodSize = 5
     polynomialSigma = 1.1
-    flags = cv2.OPTFLOW_FARNEBACK_GAUSSIAN #cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN
+    flags =  cv2.OPTFLOW_USE_INITIAL_FLOW  # cv2.OPTFLOW_FARNEBACK_GAUSSIAN #cv2.OPTFLOW_FARNEBACK_GAUSSIAN #
 
     for i in range(skipfirstFrame-1):
         ret, frame = cap.read()
