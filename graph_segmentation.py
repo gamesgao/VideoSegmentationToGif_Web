@@ -60,22 +60,25 @@ class GraphSegmentationEuclideanRGBFlowAngle(GraphSegmentationDistance):
 
     def __call__(self, n, m):
         assert (len(self._weights) == 2)
-        dr = int(n.r) - int(m.r)
-        dg = int(n.g) - int(m.g)
-        db = int(n.b) - int(m.b)
+        #dr = int(n.r) - int(m.r)
+        #dg = int(n.g) - int(m.g)
+        #db = int(n.b) - int(m.b)
+        dr = (n.r) - (m.r)
+        dg = (n.g) - (m.g)
+        db = (n.b) - (m.b)
         if n.t == m.t:
             # Use flow within frames.
             n_f = math.sqrt(n.fx * n.fx + n.fy * n.fy)
             m_f = math.sqrt(m.fx * m.fx + m.fy * m.fy)
-            if n_f * m_f >= 1e-6:
-                cos_a = min(1.0, max(-1.0, float(n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
-            else:
-                cos_a = 1
+            #if n_f * m_f >= 1e-6:
+            cos_a = min(1.0, max(-1.0, float(n.fx * m.fx + n.fy * m.fy) / (n_f * m_f)))
+            #else:
+                #cos_a = 1
             a = math.acos(cos_a)
             pi = math.pi + 1e-4
             assert (0 <= a <= pi)
             return self._weights[0] * math.sqrt(dr * dr + dg * dg + db * db) / float(self.__D) + self._weights[
-                                                                                                     1] * a / math.pi
+                                                                                                     1] * a / pi
         else:
             return math.sqrt(dr * dr + dg * dg + db * db) / self.__D
 
