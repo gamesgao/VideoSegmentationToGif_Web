@@ -50,7 +50,7 @@ for l in range(L):
     print("----- Level " + str(l + 1))
     segmenter.addHierarchyLevel()
     print("print Segmented region graph")
-    segmenter.enforceMinimumSegmentSize(l / 2 * M)
+    segmenter.enforceMinimumSegmentSize(l / (2.0) * M)
     # M = l / 2 * M
     print("Enforce minimum segment size")
     svVideo = segmenter.deriveLabels()
