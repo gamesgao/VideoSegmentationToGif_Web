@@ -23,12 +23,15 @@ function uploadVideo(req, res, next) {
     var form = new formidable.IncomingForm();
     form.uploadDir = videoTempPath;
     form.parse(req, function(error, fields, files) {
+        //将文件名以.分隔，取得数组最后一项作为文件后缀名。
+        var types = files.videoFile.name.split('.');
+        var type = types[types.length - 1];
         var ms = new Date().getTime();
         var videoMD5 = md5(String(ms + Math.random()));
-        fs.renameSync(files.videoFile.path, `${videoTempPath}${videoMD5}.mp4`);
+        fs.renameSync(files.videoFile.path, `${videoTempPath}${videoMD5}.${type}`);
         res.send(videoMD5);
         childProcessFlag = 1;
-        child = cp.exec(`python start.py ${videoMD5}.mp4`, function(error, stdout, stderr) {
+        child = cp.exec(`python start.py ${videoMD5}.${type}`, function(error, stdout, stderr) {
             if (error) {
                 childProcessFlag = -1;
                 console.log(error.stack);
@@ -38,11 +41,10 @@ function uploadVideo(req, res, next) {
             console.log('Child Process STDOUT: ' + stdout);
         })
         child.stdout.on('data', function(data) {
-            console.log(data == '409');
-            console.log(data == '409\n');
-            console.log(data == '409\r\n');
-            console.log(data.trim() == '409');
-            if (data.trim() == '409') {
+            // console.log(videoMD5 + '.' + type);
+            // console.log(data.trim());
+            // console.log(data.trim() == (videoMD5 + '.' + type));
+            if (data.trim() == (videoMD5 + '.' + type)) {
                 childProcessFlag = 2;
             } else {
                 console.log(data);

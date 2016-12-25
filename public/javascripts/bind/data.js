@@ -3,8 +3,9 @@ var context;
 var resultpath = "/images/result/";
 var timeIntervalForCheck = 5000;
 
-$('#videoFile').change(function() {
-    $('#photoCover').val($(this).val());
+$(function() {
+    $('#formbackground').height($(window).height());
+    $('#formbackground').width($(window).width());
 });
 
 var app = new Vue({
@@ -14,6 +15,7 @@ var app = new Vue({
         fileWarning: "", // 上传文件中的警告信息
         currentState: 1, // 当前模式, 1 代表上传文件模式, 2 代表展示分析结果模式
         videoMD5: "", // 已上传的 video 文件的MD5值
+        fileType: "", //文件的类型
         uploadTotal: 1, // 文件总大小
         uploadLoaded: 0, // 当前已上传的大小
         uploadMaskOpen: false, //mask的上传按钮
@@ -36,6 +38,8 @@ var app = new Vue({
             // 禁止重复上传
             this.fileWarning = "正在上传文件中...请稍后...";
             this.uploadOpen = false;
+            var types = file.name.split('.');
+            this.fileType = types[types.length - 1];
 
             // 构建新的 FormData
             var fileFormData = new FormData();
@@ -45,7 +49,7 @@ var app = new Vue({
             var that = this;
             this.$http.post('/data/uploadVideo', fileFormData, {
                 progress: function(event) {
-                    console.log(event.total);
+                    // console.log(event.total);
                     that.uploadTotal = event.total;
                     that.uploadLoaded = event.loaded;
                 }
@@ -79,21 +83,23 @@ var app = new Vue({
                     that.fileWarning = "显示第一帧图像";
                     that.currentState = 2;
                     that.uploadMaskOpen = true;
-                    canvas = $('#interact');
-                    context = document.getElementById('interact').getContext('2d');
-                    bindEvent();
-                    var img = $(new Image());
-                    img.attr("src", resultpath + `${videoMD5}.mp4.jpg`);
-                    img.load(function() {
-                        canvas.attr("width", img.get(0).width);
-                        canvas.attr("height", img.get(0).height);
-                        context.drawImage(img.get(0), 0, 0);
-                        context.strokeStyle = "#000000";
-                        context.lineJoin = "round";
-                        context.lineWidth = 2;
+                    that.$nextTick(function() {
+                        canvas = $('#interact');
+                        context = document.getElementById('interact').getContext('2d');
+                        bindEvent();
+                        var img = $(new Image());
+                        img.attr("src", resultpath + `${videoMD5}.${that.fileType}.jpg`);
+                        img.load(function() {
+                            canvas.attr("width", img.get(0).width);
+                            canvas.attr("height", img.get(0).height);
+                            context.drawImage(img.get(0), 0, 0);
+                            context.strokeStyle = "#000000";
+                            context.lineJoin = "round";
+                            context.lineWidth = 2;
+                        })
                     })
                 } else {
-                    this.gifPath = resultpath + `${videoMD5}.mp4.gif`;
+                    this.gifPath = resultpath + `${videoMD5}.${that.fileType}.gif`;
                     this.gifShow = true;
                     console.log("the process is end!");
                 }

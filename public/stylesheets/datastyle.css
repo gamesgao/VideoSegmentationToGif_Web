@@ -11,14 +11,29 @@
 
 .upfilebox button {
     position: absolute;
-    display: inline-block;
     text-align: center;
     top: 0px;
     left: 0px;
 }
 
+.file-warning {
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+}
+
+.canvasAlign {
+    margin: 0 auto;
+}
+
+label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    color: #fff;
+    font-size: 20px;
+}
+
 body {
-    padding-top: 70px;
+    padding-top: 50px;
     background-color: #f2f2f2;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
@@ -119,5 +134,5 @@ h2.subtitle {
 }
 
 #selector {
-    margin: 100px;
+    margin: 50px;
 }

@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import sys
 import IO
 from graph_segmentation import *
 
@@ -17,7 +17,7 @@ flowVideo = IO.readFlowVideo(readSource)
 assert video.getFrameNumber() > 0
 assert video.getFrameNumber() == flowVideo.getFrameNumber()
 M = 300
-L = 30
+L = 1
 c = 0.02
 beta = 0.25
 alpha = 1 - beta
@@ -58,6 +58,7 @@ for l in range(L):
         IO.writeColoredSegmentationVideo(l + 1, svVideo, fig, None, False,source)
     else:
         IO.writeColoredSegmentationVideo(l + 1, svVideo, fig, video, True,source)
+    sys.stdout.flush()
     # save
 
 print("all Finished! ")

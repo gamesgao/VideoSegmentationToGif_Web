@@ -16,6 +16,9 @@
 </head>
 
 <body>
+    <div id="formbackground" style="position:absolute; z-index:-2;">
+        <img src="/images/data-bg.jpg" height="100%" width="100%" />
+    </div>
     <!--导航栏-->
     <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -46,23 +49,37 @@
                                 </div>
                                 <div class="upfilebox col-md-2">
                                     <input id="videoFile" type="file" v-on:change="checkFileName()">
-                                    <button class="btn btn-primary">Browse</button>
+                                    <button class="btn btn-primary btn-block">Browse</button>
                                 </div>
                             </div>
-                            <label for="submitBtn">确认上传</label>
-                            <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary" v-on:click="uploadFile()">确认上传</button>
-                            <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
-                            <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                        </div>
+                        <label for="submitBtn" v-if="uploadOpen">确认上传</label>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-10">
+                                </div>
+                                <div class="col-md-2">
+                                    <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary btn-block" v-on:click="uploadFile()">确认上传</button>
+                                </div>
+                                <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
+                                <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        <div class="container">
+        <div class="container" v-if="currentState == 2">
             <div class="row">
-                <img v-if="gifShow" v-bind:src="gifPath">
-                <canvas id="interact" width="0" height="0"></canvas>
+                <div class="canvasAlign">
+                    <canvas v-if="!gifShow" id="interact" width="0" height="0"></canvas>
+                </div>
+            </div>
+            <div class="row">
                 <button v-if="uploadMaskOpen" id="submitMaskBtn" class="btn btn-primary" v-on:click="uploadMask()">确认结果</button>
+            </div>
+            <div class="row">
+                <img v-if="gifShow" v-bind:src="gifPath" class="img-responsive">
             </div>
         </div>
     </div>

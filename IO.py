@@ -12,7 +12,7 @@ from video import *
 
 skipFrame = 5
 readFrame = 5
-skipfirstFrame = 25
+skipfirstFrame = 5
 
 
 def readVideo(path):
@@ -118,9 +118,8 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
             # cv2.imwrite(str(path) + '.' + str(t) + '.jpg', coloredLabels)
             cv2.imwrite("./public/images/result/" + source + '.jpg', coloredLabels)
             sys.stdout.flush()
-            sys.stdout.flush()
             time.sleep(1)
-            print ("409")
+            print (source)
             sys.stdout.flush()
             name = raw_input("")
             fig = json.loads(name)
