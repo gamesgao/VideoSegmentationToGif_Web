@@ -131,7 +131,7 @@ a.navbar-brand:hover {
     padding-top: 150px;
     background-attachment: relative;
     background-position: center center;
-    min-height: 650px;
+    min-height: 755px;
     width: 100%;
     -webkit-background-size: 100%;
     -moz-background-size: 100%;
@@ -196,8 +196,7 @@ h2.subtitle {
 /* footer */
 
 #footer {
-    background: #fd680e
-;
+    background: #fd680e;
     padding: 20px 0 5px;
 }
 

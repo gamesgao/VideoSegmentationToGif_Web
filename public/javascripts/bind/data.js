@@ -3,6 +3,9 @@ var context;
 var resultpath = "/images/result/";
 var timeIntervalForCheck = 5000;
 
+$('#videoFile').change(function() {
+    $('#photoCover').val($(this).val());
+});
 
 var app = new Vue({
     el: "#selector",
@@ -15,7 +18,8 @@ var app = new Vue({
         uploadLoaded: 0, // 当前已上传的大小
         uploadMaskOpen: false, //mask的上传按钮
         gifShow: false, //gif图片是否已经显示
-        gifPath: "" //gif文件路径
+        gifPath: "", //gif文件路径
+        filePath: "" //video文件路径
     },
     computed: {
         progress: function() {
@@ -105,11 +109,10 @@ var app = new Vue({
                 console.log("读取文件信息错误:" + err);
                 return;
             }
-
-
+            this.filePath = fileName;
             // 检查是否为 video 文件
-            if (fileName.indexOf(".mp4") === -1) {
-                this.fileWarning = "上传的文件必须是 mp4 文件!";
+            if (fileName.indexOf(".mp4") === -1 && fileName.indexOf(".avi") === -1) {
+                this.fileWarning = "上传的文件必须是 mp4或avi 文件!";
                 this.uploadOpen = false;
                 return;
             }

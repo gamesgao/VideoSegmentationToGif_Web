@@ -16,7 +16,7 @@ var childProcessFlag = 0;
 var child;
 
 function data(req, res, next) {
-    res.render('data', { title: 'VideoSegmentation' })
+    res.render('data', { title: 'Video Segmentation By G&C' })
 }
 
 function uploadVideo(req, res, next) {
