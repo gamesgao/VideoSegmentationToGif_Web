@@ -40,6 +40,8 @@ jspm_packages
 *.bmp
 *.jpg
 *.gif
+!data-bg.jpg
+!main-bg.jpg
 
 #video
 *.mp4
