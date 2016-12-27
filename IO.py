@@ -10,9 +10,9 @@ import cv2
 import imageio
 from video import *
 
-skipFrame = 5
+skipFrame = 2
 readFrame = 5
-skipfirstFrame = 5
+skipfirstFrame = 0
 
 
 def readVideo(path):
