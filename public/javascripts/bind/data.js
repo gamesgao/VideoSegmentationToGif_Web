@@ -13,6 +13,7 @@ var app = new Vue({
     data: {
         uploadOpen: false, // 只有在文件内容更改后才允许上传文件
         fileWarning: "", // 上传文件中的警告信息
+        imgFileWarning: "", //img文件上传的警告信息
         currentState: 1, // 当前模式, 1 代表上传文件模式, 2 代表展示分析结果模式
         videoMD5: "", // 已上传的 video 文件的MD5值
         fileType: "", //文件的类型
@@ -20,8 +21,10 @@ var app = new Vue({
         uploadLoaded: 0, // 当前已上传的大小
         uploadMaskOpen: false, //mask的上传按钮
         gifShow: false, //gif图片是否已经显示
+        uploadImgOpen: false, //img图片上传
         gifPath: "", //gif文件路径
-        filePath: "" //video文件路径
+        filePath: "", //video文件路径
+        imgFilePath: "" //img文件路径
     },
     computed: {
         progress: function() {
@@ -32,38 +35,51 @@ var app = new Vue({
         chooseFile: function() {
             $('#videoFile')[0].click();
         },
-        uploadFile: function() {
-            var file = document.getElementById("videoFile").files[0];
+        uploadFile: function(selection) {
+            if (selection == 0) {
+                var file = document.getElementById("videoFile").files[0];
+                // 禁止重复上传
+                this.fileWarning = "正在上传文件中...请稍后...";
+                this.uploadOpen = false;
+                var types = file.name.split('.');
+                this.fileType = types[types.length - 1];
+            } else {
+                var file = document.getElementById("imgFile").files[0];
+                // 禁止重复上传
+                this.imgFileWarning = "正在上传文件中...请稍后...";
+                this.uploadImgOpen = false;
+            }
 
-            // 禁止重复上传
-            this.fileWarning = "正在上传文件中...请稍后...";
-            this.uploadOpen = false;
-            var types = file.name.split('.');
-            this.fileType = types[types.length - 1];
+
 
             // 构建新的 FormData
             var fileFormData = new FormData();
-            fileFormData.append("videoFile", file);
-            fileFormData.append("videoFileName", file.name);
+            fileFormData.append("file", file);
+            fileFormData.append("selection", selection);
+            if (selection == 1) fileFormData.append("videoMD5", this.videoMD5);
+            // fileFormData.append("fileName", file.name);
 
             var that = this;
-            this.$http.post('/data/uploadVideo', fileFormData, {
+            this.$http.post('/data/uploadFile', fileFormData, {
                 progress: function(event) {
                     // console.log(event.total);
                     that.uploadTotal = event.total;
                     that.uploadLoaded = event.loaded;
                 }
             }).then(function(res) {
-                if (res.data.length === 32) {
-                    this.videoMD5 = res.data;
-                    this.fileWarning = "正在分析文件中...请稍后...";
-                    setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck)
-                } else {
-                    alert(res.data);
-                }
-            }, function(err) {
-                console.log(err);
-            })
+                    if (res.data.length === 32 && selection == 0) {
+                        this.videoMD5 = res.data;
+                        this.fileWarning = "正在分析文件中...请稍后...";
+                        setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck)
+                    } else if (selection == 1) {
+                        this.imgFileWarning = "正在分析文件中...请稍后...";
+                    } else {
+                        alert(res.data);
+                    }
+                },
+                function(err) {
+                    console.log(err);
+                })
 
         },
 
@@ -108,24 +124,43 @@ var app = new Vue({
             })
         },
 
-        checkFileName: function() {
+        checkFileName: function(selection) {
             try {
-                var fileName = document.getElementById("videoFile").files[0].name;
+                if (selection == 0) {
+                    var fileName = document.getElementById("videoFile").files[0].name;
+                } else {
+                    var fileName = document.getElementById("imgFile").files[0].name;
+                }
             } catch (err) {
                 console.log("读取文件信息错误:" + err);
                 return;
             }
             this.filePath = fileName;
-            // 检查是否为 video 文件
-            if (fileName.indexOf(".mp4") === -1 && fileName.indexOf(".avi") === -1) {
-                this.fileWarning = "上传的文件必须是 mp4或avi 文件!";
-                this.uploadOpen = false;
-                return;
+            if (selection == 0) {
+                // 检查是否为 video 文件
+                if (fileName.indexOf(".mp4") === -1 && fileName.indexOf(".avi") === -1) {
+                    this.fileWarning = "上传的文件必须是 mp4 或 avi 文件!";
+                    this.uploadOpen = false;
+                    return;
+                } else {
+                    // 一切检查通过, 允许上传!
+                    this.fileWarning = "";
+                    this.uploadOpen = true;
+                }
+            } else {
+                // 检查是否为 video 文件
+                if (fileName.indexOf(".jpg") === -1 && fileName.indexOf(".png") === -1) {
+                    this.imgFileWarning = "上传的文件必须是 jpg 或 png 文件!";
+                    this.uploadImgOpen = false;
+                    return;
+                } else {
+                    // 一切检查通过, 允许上传!
+                    this.imgFileWarning = "";
+                    this.uploadImgOpen = true;
+                }
             }
 
-            // 一切检查通过, 允许上传!
-            this.fileWarning = "";
-            this.uploadOpen = true;
+
         },
 
         uploadMask: function() {

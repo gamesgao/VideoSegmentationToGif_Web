@@ -48,7 +48,7 @@
                                     <input id="photoCover" class="form-control" type="text" placeholder="File Path" v-bind:value="filePath" readonly>
                                 </div>
                                 <div class="upfilebox col-md-2">
-                                    <input id="videoFile" type="file" v-on:change="checkFileName()">
+                                    <input id="videoFile" type="file" v-on:change="checkFileName(0)">
                                     <button class="btn btn-primary btn-block">Browse</button>
                                 </div>
                             </div>
@@ -59,10 +59,12 @@
                                 <div class="col-md-10">
                                 </div>
                                 <div class="col-md-2">
-                                    <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary btn-block" v-on:click="uploadFile()">确认上传</button>
+                                    <button v-if="uploadOpen" id="submitBtn" class="btn btn-primary btn-block" v-on:click="uploadFile(0)">确认上传</button>
                                 </div>
-                                <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
-                                <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                                <div>
+                                    <p v-if="fileWarning !== ''" class="file-warning">{{ fileWarning }}</p>
+                                    <p v-if="fileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -74,6 +76,38 @@
                 <div class="canvasAlign">
                     <canvas v-if="!gifShow" id="interact" width="0" height="0"></canvas>
                 </div>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="form-group">
+                        <label for="imgFileBtn">选择文件</label>
+                        <div class="container">
+                            <div class="row" id="imgFileBtn">
+                                <div class="col-md-10">
+                                    <input id="photoCoverForImg" class="form-control" type="text" placeholder="Img File Path" v-bind:value="imgFilePath" readonly>
+                                </div>
+                                <div class="upfilebox col-md-2">
+                                    <input id="imgFile" type="file" v-on:change="checkFileName(1)">
+                                    <button class="btn btn-primary btn-block">Browse</button>
+                                </div>
+                            </div>
+                        </div>
+                        <label for="submitBtn" v-if="uploadImgOpen">确认上传</label>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-10">
+                                </div>
+                                <div class="col-md-2">
+                                    <button v-if="uploadImgOpen" id="submitImgBtn" class="btn btn-primary btn-block" v-on:click="uploadFile(1)">确认上传</button>
+                                </div>
+                                <div>
+                                    <p v-if="imgFileWarning !== ''" class="file-warning">{{ imgFileWarning }}</p>
+                                    <p v-if="imgFileWarning === '正在上传文件中...请稍后...'" class="file-warning">已上传 {{ (progress * 100).toFixed(2) }}%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="row">
                 <button v-if="uploadMaskOpen" id="submitMaskBtn" class="btn btn-primary" v-on:click="uploadMask()">确认结果</button>

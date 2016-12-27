@@ -6,7 +6,7 @@ var crypto = require('crypto');
 var router = express.Router();
 
 router.get('/', data);
-router.post('/uploadVideo', uploadVideo);
+router.post('/uploadFile', uploadFile);
 router.post('/checkAnalyse', checkAnalyse);
 router.post('/getMask', getMask);
 
@@ -19,37 +19,42 @@ function data(req, res, next) {
     res.render('data', { title: 'Video Segmentation By G&C' })
 }
 
-function uploadVideo(req, res, next) {
+function uploadFile(req, res, next) {
     var form = new formidable.IncomingForm();
     form.uploadDir = videoTempPath;
     form.parse(req, function(error, fields, files) {
         //将文件名以.分隔，取得数组最后一项作为文件后缀名。
-        var types = files.videoFile.name.split('.');
+        var types = files.file.name.split('.');
         var type = types[types.length - 1];
         var ms = new Date().getTime();
-        var videoMD5 = md5(String(ms + Math.random()));
-        fs.renameSync(files.videoFile.path, `${videoTempPath}${videoMD5}.${type}`);
+        console.log(fields.selection);
+        if (fields.selection == 0) var videoMD5 = md5(String(ms + Math.random()));
+        else var videoMD5 = fields.videoMD5;
+        if (fields.selection == 0) fs.renameSync(files.file.path, `${videoTempPath}${videoMD5}.${type}`);
+        else fs.renameSync(files.file.path, `${videoTempPath}${videoMD5}.bg`);
         res.send(videoMD5);
-        childProcessFlag = 1;
-        child = cp.exec(`python start.py ${videoMD5}.${type}`, function(error, stdout, stderr) {
-            if (error) {
-                childProcessFlag = -1;
-                console.log(error.stack);
-                console.log('Error code: ' + error.code);
-            }
-            childProcessFlag = 0;
-            console.log('Child Process STDOUT: ' + stdout);
-        })
-        child.stdout.on('data', function(data) {
-            // console.log(videoMD5 + '.' + type);
-            // console.log(data.trim());
-            // console.log(data.trim() == (videoMD5 + '.' + type));
-            if (data.trim() == (videoMD5 + '.' + type)) {
-                childProcessFlag = 2;
-            } else {
-                console.log(data);
-            }
-        })
+        if (fields.selection == 0) {
+            childProcessFlag = 1;
+            child = cp.exec(`python start.py ${videoMD5}.${type}`, function(error, stdout, stderr) {
+                if (error) {
+                    childProcessFlag = -1;
+                    console.log(error.stack);
+                    console.log('Error code: ' + error.code);
+                }
+                childProcessFlag = 0;
+                console.log('Child Process STDOUT: ' + stdout);
+            })
+            child.stdout.on('data', function(data) {
+                // console.log(videoMD5 + '.' + type);
+                // console.log(data.trim());
+                // console.log(data.trim() == (videoMD5 + '.' + type));
+                if (data.trim() == (videoMD5 + '.' + type)) {
+                    childProcessFlag = 2;
+                } else {
+                    console.log(data);
+                }
+            })
+        }
     })
 }
 
