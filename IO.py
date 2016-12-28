@@ -102,6 +102,7 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
     t = 0
     numToC = {}
     gif = []
+    bgLabels = np.zeros((video.getFrameHeight(), video.getFrameWeight(), 3), dtype=np.uint8)
     for t in range(video.getFrameNumber()):
         labels = video.getFrame(t)
         coloredLabels = np.zeros((len(labels), len(labels[0]), 3), dtype=np.uint8)
@@ -130,6 +131,8 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
                     if (fig[i][j] == 1):
                         numToC[labels[i][j]] = [255, 255, 255]
 
+        if (distill):
+            cv2.imread("./videoTemp/" + source + '.bg', bgLabels)
         for i in range(len(labels)):
             for j in range(len(labels[i])):
                 label = labels[i][j]
@@ -139,6 +142,7 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
                         coloredLabels[i][j] = orivideo.get(t, i, j)
                     else:
                         coloredLabels[i][j] = [0, 0, 0]
+                        coloredLabels[i][j] = bgLabels[i][j]
                 else:
                     while colors[label][0] == 0:
                         colors[label][0] = random.randrange(0, 256)
