@@ -31,7 +31,7 @@ function uploadFile(req, res, next) {
         if (fields.selection == 0) var videoMD5 = md5(String(ms + Math.random()));
         else var videoMD5 = fields.videoMD5;
         if (fields.selection == 0) fs.renameSync(files.file.path, `${videoTempPath}${videoMD5}.${type}`);
-        else fs.renameSync(files.file.path, `${videoTempPath}${videoMD5}.bg`);
+        else fs.renameSync(files.file.path, `${videoTempPath}${videoMD5}.${type}.bg`);
         res.send(videoMD5);
         if (fields.selection == 0) {
             childProcessFlag = 1;
