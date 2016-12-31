@@ -148,7 +148,7 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
                         numToC[labels[i][j]] = [255, 255, 255]
 
         if (distill):
-            bgLabels = cv2.imread("./videoTemp/" + source + '.bg')
+            bgLabels = cv2.imread("./videoTemp/" + source.split(".")[0] + '.bg')
             bgHeight = len(bgLabels)
             bgWidth = len(bgLabels[0])
         for i in range(len(labels)):
