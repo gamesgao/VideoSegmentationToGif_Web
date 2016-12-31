@@ -13,7 +13,7 @@ from video import *
 
 skipFrame = 0
 readFrame = 5
-skipfirstFrame = 1
+skipfirstFrame = 0
 
 def readVideo(path):
     if len(path) == 0:
