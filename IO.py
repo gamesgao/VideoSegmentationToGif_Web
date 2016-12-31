@@ -11,9 +11,9 @@ import json
 import imageio
 from video import *
 
-skipFrame = 2
+skipFrame = 0
 readFrame = 5
-skipfirstFrame = 0
+skipfirstFrame = 1
 
 def readVideo(path):
     if len(path) == 0:
@@ -99,6 +99,7 @@ def readFlowVideo(path):
                                                      flags))
         for i in range(skipFrame):
             ret, frame = cap.read()
+        ret, frame = cap.read()
         prevFrame = nextFrame
 
         # print flows
