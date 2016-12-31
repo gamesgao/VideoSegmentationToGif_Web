@@ -4,7 +4,7 @@ import IO
 from graph_segmentation import *
 
 if len(sys.argv) == 1:
-    source = readSource = '13.mp4'
+    source = readSource = 'pre.avi'
 else:
     source = sys.argv[1]
 # groundTruth = False
@@ -12,7 +12,9 @@ else:
     readSource = "./videoTemp/" + source
 
 video = IO.readVideo(readSource)
-flowVideo = IO.readFlowVideo(readSource)
+# flowVideo = IO.readFlowVideo(readSource)
+flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
+
 
 assert video.getFrameNumber() > 0
 assert video.getFrameNumber() == flowVideo.getFrameNumber()

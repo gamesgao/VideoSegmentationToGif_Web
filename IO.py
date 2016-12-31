@@ -6,14 +6,14 @@ import sys
 import time
 
 import cv2
-
+import glob
+import json
 import imageio
 from video import *
 
 skipFrame = 2
 readFrame = 5
 skipfirstFrame = 0
-
 
 def readVideo(path):
     if len(path) == 0:
@@ -40,6 +40,21 @@ def readVideo(path):
 
     cap.release()
     return result
+
+def readFlowVideoFromFile(path):
+    result = FlowVideo()
+    for filename in glob.glob(path + r'*.txt'):
+        frame = readMat(filename)
+        result.addFrame(frame)
+    return result
+
+def readMat(path):
+    with open(path) as fin:
+        result = json.load(fin)
+        mat = np.array(result["data"])
+        mat.resize(result["rows"], result["cols"],2)
+        fin.close()
+    return mat
 
 
 def readFlowVideo(path):

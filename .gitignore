@@ -46,6 +46,8 @@ jspm_packages
 
 #video
 *.mp4
+*.avi
+!pre.avi
 !13.mp4
 
 #python
