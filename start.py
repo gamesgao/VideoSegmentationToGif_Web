@@ -17,9 +17,9 @@ flowVideo = IO.readFlowVideo(readSource)
 assert video.getFrameNumber() > 0
 assert video.getFrameNumber() == flowVideo.getFrameNumber()
 M = 300
-L = 1
+L = 40
 c = 0.02
-beta = 0.25
+beta = 0.2
 alpha = 1 - beta
 
 magic = GraphSegmentationMagicThreshold(c)
