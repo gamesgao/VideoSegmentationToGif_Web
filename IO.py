@@ -118,7 +118,7 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
     t = 0
     numToC = {}
     gif = []
-    bgLabels = np.zeros((video.getFrameHeight(), video.getFrameWeight(), 3), dtype=np.uint8)
+    bgLabels = np.zeros((video.getFrameHeight(), video.getFrameWidth(), 3), dtype=np.uint8)
     for t in range(video.getFrameNumber()):
         labels = video.getFrame(t)
         coloredLabels = np.zeros((len(labels), len(labels[0]), 3), dtype=np.uint8)
