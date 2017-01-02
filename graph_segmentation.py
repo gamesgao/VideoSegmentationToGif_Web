@@ -3,6 +3,7 @@ from __future__ import division
 import math
 import random
 import sys
+import cv2
 
 from video import *
 from video_graph import *
