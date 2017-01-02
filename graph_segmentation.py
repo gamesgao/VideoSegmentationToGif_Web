@@ -681,7 +681,7 @@ class GraphSegmentation:
                     b = bgr[0]
                     g = bgr[1]
                     r = bgr[2]
-                    if clrToWhether.has_key([b,g,r]):
+                    if clrToWhether.has_key((b,g,r)):
                         coloredLabels[i][j][0] = video.get(t, i, j)[2]
                         coloredLabels[i][j][1] = video.get(t, i, j)[1]
                         coloredLabels[i][j][2] = video.get(t, i, j)[0]
