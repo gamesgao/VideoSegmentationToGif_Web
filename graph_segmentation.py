@@ -304,9 +304,10 @@ class GraphSegmentation:
         assert (video.getFrameHeight() > 0)
         assert (video.getFrameWidth() > 0)
 
-        assert (video.getFrameNumber() == flow.getFrameNumber())
-        assert (video.getFrameHeight() == flow.getFrameHeight())
-        assert (video.getFrameWidth() == flow.getFrameWidth())
+        if (flow != 0):
+            assert (video.getFrameNumber() == flow.getFrameNumber())
+            assert (video.getFrameHeight() == flow.getFrameHeight())
+            assert (video.getFrameWidth() == flow.getFrameWidth())
 
         self.__T = video.getFrameNumber()
         self.__H = video.getFrameHeight()
@@ -351,9 +352,10 @@ class GraphSegmentation:
 
                     # Flow.
                     # if (t < T - 1)
-                    node.fx = flow.get(t, i, j)[0]
-                    node.fy = flow.get(t, i, j)[1]
-                    node.f = math.sqrt(node.fx * node.fx + node.fy * node.fy)
+                    if (flow != 0):
+                        node.fx = flow.get(t, i, j)[0]
+                        node.fy = flow.get(t, i, j)[1]
+                        node.f = math.sqrt(node.fx * node.fx + node.fy * node.fy)
                     # else
                     # node.fx = 0
                     # node.fy = 0
@@ -584,4 +586,44 @@ class GraphSegmentation:
         assert (video.getFrameHeight() > 0)
         assert (video.getFrameWidth() > 0)
         video.relabel()
+        return video
+
+    def deriveLabelsNew(self):
+        assert (self.__graph.getNumNodes() > 0)
+        # // assert (graph.getNumEdges() > 0);
+        # SegmentationVideo
+        video = SegmentationVideo()
+        clrToN = {}
+        cnt = 0
+        for t in range(self.__T):
+            for i in range(self.__H):
+                for j in range(self.__W):
+                    n = int(self.__H * self.__W * t + self.__W * i + j)
+                    node = self.__graph.getNode(n)
+                    if (not (clrToN.has_key((node.r, node.b, node.g)))):
+                        cnt += 1
+                        clrToN[(node.r, node.b, node.g)] = cnt
+
+        for t in range(self.__T):
+            # cv::Mat frame(H, W, CV_32SC1, cv::Scalar(0))
+            # intersectionMatrix \
+            frame = np.zeros((self.__H, self.__W), np.int32)
+            for i in range(self.__H):
+                for j in range(self.__W):
+                    # int
+                    n = int(self.__H * self.__W * t + self.__W * i + j)
+
+                    # VideoNode
+                    node = self.__graph.getNode(n)
+                    # VideoNode
+                    #S_node = self.__graph.findNodeComponent(node)
+                    #max = sys.maxint
+                    #assert (S_node.id <= max)
+                    frame[i][j] = clrToN[(node.r, node.b, node.g)]
+            video.addFrame(frame)
+
+        assert (video.getFrameNumber() > 0)
+        assert (video.getFrameHeight() > 0)
+        assert (video.getFrameWidth() > 0)
+        #video.relabel()
         return video

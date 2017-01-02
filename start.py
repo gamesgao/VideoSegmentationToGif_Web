@@ -31,6 +31,16 @@ segmenter = GraphSegmentation(distance, magic)
 
 fig = []
 
+
+
+# If you want to use the google version, use this:#
+segmenter.buildGraph(video, 0)
+svVideo = segmenter.deriveLabelsNew()
+IO.writeColoredSegmentationVideo(0, svVideo, fig, video, True,source)
+# Or you can use our version:
+
+
+'''
 segmenter.buildGraph(video, flowVideo)
 segmenter.buildEdges()
 print("----- Level 0")
@@ -62,5 +72,5 @@ for l in range(L):
         IO.writeColoredSegmentationVideo(l + 1, svVideo, fig, video, True,source)
     sys.stdout.flush()
     # save
-
+'''
 print("all Finished! ")
