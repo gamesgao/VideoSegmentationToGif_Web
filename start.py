@@ -42,7 +42,7 @@ svVideo = segmenter.deriveLabels()
 IO.writeColoredSegmentationVideo(0, svVideo, fig, None, False,source)
 # save
 
-hmagic = GraphSegmentationHierarchyMagicThreshold(c, 2)
+hmagic = GraphSegmentationHierarchyMagicThreshold(c, 4)
 hdistance = GraphSegmentationHierarchyRGBChiSquareFlowAngle(alpha, beta)
 segmenter.setHierarchyMagic(hmagic)
 segmenter.setHierarchyDistance(hdistance)
