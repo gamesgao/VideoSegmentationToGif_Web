@@ -74,6 +74,7 @@ function renderSegmentVideo(videoMD5, type, isGoogle){
 }
 
 function generateGIF(videoMD5, type, isGoogle){
+    console.log(`python start.py ${videoMD5}.${type} ${isGoogle}`);
     child = cp.exec(`python start.py ${videoMD5}.${type} ${isGoogle}`, function(error, stdout, stderr) {
         if (error) {
             childProcessFlag = -1;
