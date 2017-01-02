@@ -35,33 +35,72 @@ function uploadFile(req, res, next) {
         res.send(videoMD5);
         if (fields.selection == 0) {
             childProcessFlag = 1;
-            child = cp.exec(`python start.py ${videoMD5}.${type}`, function(error, stdout, stderr) {
-                if (error) {
-                    childProcessFlag = -1;
-                    console.log(error.stack);
-                    console.log('Error code: ' + error.code);
-                }
-                childProcessFlag = 0;
-                console.log('Child Process STDOUT: ' + stdout);
-            })
-            child.stdout.on('data', function(data) {
-                // console.log(videoMD5 + '.' + type);
-                // console.log(data.trim());
-                // console.log(data.trim() == (videoMD5 + '.' + type));
-                if (data.trim() == (videoMD5 + '.' + type)) {
-                    childProcessFlag = 2;
-                } else {
-                    console.log(data);
-                }
-            })
+            if(fields.isGoogle == 1) calSegmentByGoogle(videoMD5, type, fields.isGoogle);
+            else generateGIF(videoMD5, type, fields.isGoogle);
         }
     })
 }
+
+function calSegmentByGoogle(videoMD5, type, isGoogle){
+    child1 = cp.exec(`../../seg_tree_sample --input_file=${videoTempPath}${videoMD5}.${type} --logging --write_to_file`, function(error, stdout, stderr){
+        if (error) {
+            childProcessFlag = -1;
+            console.log(error.stack);
+            console.log('Error code: ' + error.code);
+        }
+        // childProcessFlag = 0;
+        console.log('Child Process STDOUT: ' + stdout);
+        renderSegmentVideo(videoMD5, type, isGoogle);
+    });
+    child1.stdout.on('data', function(data) {
+            console.log(data);
+    });
+}
+
+function renderSegmentVideo(videoMD5, type, isGoogle){
+    child2 = cp.exec(`../../segment_renderer --input_file=${videoTempPath}${videoMD5}.${type}.pb --output_video_file=${videoTempPath}output.avi --render_level=0.1 --logging`, function(error, stdout, stderr){
+        if (error) {
+            childProcessFlag = -1;
+            console.log(error.stack);
+            console.log('Error code: ' + error.code);
+        }
+        // childProcessFlag = 0;
+        console.log('Child Process STDOUT: ' + stdout);
+        generateGIF(videoMD5, type);
+    });
+    child2.stdout.on('data', function(data) {
+            console.log(data);
+    });
+}
+
+function generateGIF(videoMD5, type, isGoogle){
+    child = cp.exec(`python start.py ${videoMD5}.${type} ${isGoogle}`, function(error, stdout, stderr) {
+        if (error) {
+            childProcessFlag = -1;
+            console.log(error.stack);
+            console.log('Error code: ' + error.code);
+        }
+        childProcessFlag = 0;
+        console.log('Child Process STDOUT: ' + stdout);
+    })
+    child.stdout.on('data', function(data) {
+        // console.log(videoMD5 + '.' + type);
+        // console.log(data.trim());
+        // console.log(data.trim() == (videoMD5 + '.' + type));
+        if (data.trim() == (videoMD5 + '.' + type)) {
+            childProcessFlag = 2;
+        } else {
+            console.log(data);
+        }
+    })
+}
+
 
 function checkAnalyse(req, res, next) {
     var videoMD5 = req.body.videoMD5;
     return res.send(childProcessFlag.toString());
 }
+
 
 function getMask(req, res, next) {
     var mask = req.body.mask;
