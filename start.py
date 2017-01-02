@@ -12,6 +12,7 @@ else:
     readSource = "./videoTemp/" + source
 
 video = IO.readVideo(readSource)
+sevideo = IO.readVideo(readSource+".avi")
 # flowVideo = IO.readFlowVideo(readSource)
 flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
 
@@ -34,9 +35,9 @@ fig = []
 
 
 # If you want to use the google version, use this:#
-segmenter.buildGraph(video, 0)
-svVideo = segmenter.deriveLabelsNew()
-IO.writeColoredSegmentationVideo(0, svVideo, fig, video, True,source)
+
+segmenter.buildAndLabelAndPrint(video, sevideo, source, fig)
+
 # Or you can use our version:
 
 
