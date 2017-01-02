@@ -652,18 +652,18 @@ class GraphSegmentation:
                         cnt += 1
                         clrToN[(r, b, g)] = cnt
         coloredLabels = np.zeros((self.__H, self.__W, 3), dtype=np.uint8)
+        sys.stdout.flush()
+        time.sleep(1)
+        print (source)
+        sys.stdout.flush()
+        name = raw_input("")
+        fig = json.loads(name)
         bgLabels = cv2.imread("./videoTemp/" + source.split(".")[0] + '.bg')
         bgHeight = len(bgLabels)
         bgWidth = len(bgLabels[0])
         gif = []
         for t in range(self.__T):
             if (t == 0):
-                sys.stdout.flush()
-                time.sleep(1)
-                print (source)
-                sys.stdout.flush()
-                name = raw_input("")
-                fig = json.loads(name)
                 for i in range(self.__H):
                     for j in range(self.__W):
                         if (fig[i][j] == 1):
