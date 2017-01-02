@@ -13,7 +13,8 @@ else:
     readSource = "./videoTemp/" + source
 
 video = IO.readVideo(readSource)
-if(isGoogle == 1) sevideo = IO.readVideo(readSource+".avi")
+if(isGoogle == 1):
+    sevideo = IO.readVideo(readSource+".avi")
 else:
     flowVideo = IO.readFlowVideo(readSource)
     flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
