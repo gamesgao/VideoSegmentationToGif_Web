@@ -22,15 +22,15 @@ else:
 if(isGoogle != 1):
     assert video.getFrameNumber() > 0
     assert video.getFrameNumber() == flowVideo.getFrameNumber()
-    M = 300
-    L = 9
-    c = 0.2
-    beta = 0.2
-    alpha = 1 - beta
+M = 300
+L = 9
+c = 0.2
+beta = 0.2
+alpha = 1 - beta
 
-    magic = GraphSegmentationMagicThreshold(c)
-    distance = GraphSegmentationEuclideanRGBFlowAngle(alpha, beta)
-    segmenter = GraphSegmentation(distance, magic)
+magic = GraphSegmentationMagicThreshold(c)
+distance = GraphSegmentationEuclideanRGBFlowAngle(alpha, beta)
+segmenter = GraphSegmentation(distance, magic)
     # timer
 
 fig = []
