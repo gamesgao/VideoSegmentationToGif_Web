@@ -19,7 +19,7 @@ flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
 assert video.getFrameNumber() > 0
 assert video.getFrameNumber() == flowVideo.getFrameNumber()
 M = 300
-L = 10
+L = 9
 c = 0.2
 beta = 0.2
 alpha = 1 - beta
