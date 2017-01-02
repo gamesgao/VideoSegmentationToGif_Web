@@ -157,10 +157,17 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
                 if (distill):
                     if (numToC.has_key(label)):
                         #if numToC[label] == [255, 255, 255]:
-                        coloredLabels[i][j] = orivideo.get(t, i, j)
+                        # coloredLabels[i][j] = orivideo.get(t, i, j)
+                        coloredLabels[i][j][0] = orivideo.get(t, i, j)[2]
+                        coloredLabels[i][j][1] = orivideo.get(t, i, j)[1]
+                        coloredLabels[i][j][2] = orivideo.get(t, i, j)[0]
+
                     else:
-                        coloredLabels[i][j] = [0, 0, 0]
-                        coloredLabels[i][j] = bgLabels[i % bgHeight][j % bgWidth]
+                        # coloredLabels[i][j] = [0, 0, 0]
+                        # coloredLabels[i][j] = bgLabels[i % bgHeight][j % bgWidth]
+                        coloredLabels[i][j][0] = bgLabels[i % bgHeight][j % bgWidth][2]
+                        coloredLabels[i][j][1] = bgLabels[i % bgHeight][j % bgWidth][1]
+                        coloredLabels[i][j][2] = bgLabels[i % bgHeight][j % bgWidth][0]
                 else:
                     while colors[label][0] == 0:
                         colors[label][0] = random.randrange(0, 256)
