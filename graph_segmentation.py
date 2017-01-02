@@ -653,6 +653,7 @@ class GraphSegmentation:
                         cnt += 1
                         clrToN[(r, b, g)] = cnt
         coloredLabels = np.zeros((self.__H, self.__W, 3), dtype=np.uint8)
+        cv2.imwrite("./public/images/result/" + source + '.jpg', sevideo.getFrame(0))
         sys.stdout.flush()
         time.sleep(1)
         print (source)
