@@ -66,7 +66,7 @@ function renderSegmentVideo(videoMD5, type, isGoogle){
         }
         // childProcessFlag = 0;
         console.log('Child Process STDOUT: ' + stdout);
-        generateGIF(videoMD5, type);
+        generateGIF(videoMD5, type, isGoogle);
     });
     child2.stdout.on('data', function(data) {
             console.log(data);
