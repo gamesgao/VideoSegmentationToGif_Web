@@ -11,7 +11,7 @@ output = sys.argv[1]
 fourcc = cv2.cv.CV_FOURCC('M', 'J', 'P', 'G')
 png = glob.glob(r'./temp/*.png')
 if png != []:
-    pre = png[0]
+    pre =cv2.imread(png[0])
     out = cv2.VideoWriter(output,fourcc, 24.0, (len(pre),len(pre[0])))
 else:
     sys.exit(-1)
