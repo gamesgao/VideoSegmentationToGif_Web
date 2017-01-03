@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import glob
+import sys
+import os
 
 
 # Define the codec and create VideoWriter object
