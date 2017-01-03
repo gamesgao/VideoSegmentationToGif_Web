@@ -21,7 +21,7 @@ for filename in png:
     # frame = cv2.flip(frame,0)
     # write the flipped frame
     out.write(frame)
-    if os.path.exist(filename):
+    if os.path.exists(filename):
         os.remove(filename)
     # out.write(frame)
     # out.write(frame)
