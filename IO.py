@@ -41,6 +41,22 @@ def readVideo(path):
     cap.release()
     return result
 
+def readVideoFromFile(path):
+    png = glob.glob(path + '*.png')
+    if png != []:
+        result = Video()
+    else:
+        print("no png in path" + path)
+        sys.exit(-1)
+
+    for filename in png:
+        frame = cv2.imread(filename)
+        result.addFrame(frame)
+        if os.path.exists(filename):
+            os.remove(filename)    
+    return result
+
+
 def readFlowVideoFromFile(path):
     result = FlowVideo()
     for filename in glob.glob(path + r'*.txt'):

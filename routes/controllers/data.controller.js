@@ -66,28 +66,28 @@ function renderSegmentVideo(videoMD5, type, isGoogle){
         }
         // childProcessFlag = 0;
         console.log('Child Process STDOUT: ' + stdout);
-        generateVideo(videoMD5, type, isGoogle);
-    });
-    child2.stdout.on('data', function(data) {
-            console.log(data);
-    });
-}
-
-function generateVideo(videoMD5, type, isGoogle){
-    child2 = cp.exec(`python imgToVideo.py ${videoTempPath}${videoMD5}.${type}.avi`, function(error, stdout, stderr){
-        if (error) {
-            childProcessFlag = -1;
-            console.log(error.stack);
-            console.log('Error code: ' + error.code);
-        }
-        // childProcessFlag = 0;
-        console.log('Child Process STDOUT: ' + stdout);
         generateGIF(videoMD5, type, isGoogle);
     });
     child2.stdout.on('data', function(data) {
             console.log(data);
     });
 }
+
+// function generateVideo(videoMD5, type, isGoogle){
+//     child2 = cp.exec(`python imgToVideo.py ${videoTempPath}${videoMD5}.${type}.avi`, function(error, stdout, stderr){
+//         if (error) {
+//             childProcessFlag = -1;
+//             console.log(error.stack);
+//             console.log('Error code: ' + error.code);
+//         }
+//         // childProcessFlag = 0;
+//         console.log('Child Process STDOUT: ' + stdout);
+//         generateGIF(videoMD5, type, isGoogle);
+//     });
+//     child2.stdout.on('data', function(data) {
+//             console.log(data);
+//     });
+// }
 
 function generateGIF(videoMD5, type, isGoogle){
     console.log(`python start.py ${videoMD5}.${type} ${isGoogle}`);
