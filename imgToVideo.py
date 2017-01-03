@@ -9,9 +9,14 @@ import os
 # fourcc = cv2.VideoWriter_fourcc(*'X264')
 output = sys.argv[1]
 fourcc = cv2.cv.CV_FOURCC('M', 'J', 'P', 'G')
-out = cv2.VideoWriter(output,fourcc, 24.0, (1024,436))
+png = glob.glob(r'.\temp\*.png')
+if png != []:
+    pre = png[0]
+    out = cv2.VideoWriter(output,fourcc, 24.0, (len(pre),len(pre[0])))
+else:
+    sys.exit(-1)
 
-for filename in glob.glob(r'.\temp\*.png'):
+for filename in png:
     frame = cv2.imread(filename)
     # frame = cv2.flip(frame,0)
     # write the flipped frame
