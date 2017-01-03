@@ -44,6 +44,7 @@ def readVideo(path):
 
 def readVideoFromFile(path):
     png = glob.glob(path + '*.png')
+    png.sort()
     if png != []:
         result = Video()
     else:
