@@ -22,7 +22,7 @@ def readVideo(path):
         cap = cv2.VideoCapture(path)
 
     if not cap.isOpened():
-        print('Cannot initialize video capture')
+        print('Cannot initialize video capture:' + path)
         sys.exit(-1)
 
     result = Video()

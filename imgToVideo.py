@@ -11,7 +11,7 @@ output = sys.argv[1]
 fourcc = cv2.cv.CV_FOURCC('M', 'J', 'P', 'G')
 out = cv2.VideoWriter(output,fourcc, 24.0, (1024,436))
 
-for filename in glob.glob(r'.\*.png'):
+for filename in glob.glob(r'.\temp\*.png'):
     frame = cv2.imread(filename)
     # frame = cv2.flip(frame,0)
     # write the flipped frame

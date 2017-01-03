@@ -58,7 +58,7 @@ function calSegmentByGoogle(videoMD5, type, isGoogle){
 }
 
 function renderSegmentVideo(videoMD5, type, isGoogle){
-    child2 = cp.exec(`../../segment_renderer --input_file=${videoTempPath}${videoMD5}.${type}.pb --output_image_dir=../../temp --logging --render_level=0.1`, function(error, stdout, stderr){
+    child2 = cp.exec(`../../segment_renderer --input_file=${videoTempPath}${videoMD5}.${type}.pb --output_image_dir=temp --logging`, function(error, stdout, stderr){
         if (error) {
             childProcessFlag = -1;
             console.log(error.stack);
