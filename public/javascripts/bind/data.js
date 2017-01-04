@@ -74,6 +74,7 @@ var app = new Vue({
                         this.fileWarning = "正在分析文件中...请稍后...";
                         setTimeout(function() { that.checkAnalyse(that.videoMD5); }, timeIntervalForCheck)
                     } else if (selection == 1) {
+                        this.uploadMaskOpen = true;
                         this.imgFileWarning = "正在分析文件中...请稍后...";
                     } else {
                         alert(res.data);
@@ -100,7 +101,7 @@ var app = new Vue({
                 } else if (res.data === "2") {
                     that.fileWarning = "显示第一帧图像";
                     that.currentState = 2;
-                    that.uploadMaskOpen = true;
+                    
                     that.$nextTick(function() {
                         canvas = $('#interact');
                         context = document.getElementById('interact').getContext('2d');
