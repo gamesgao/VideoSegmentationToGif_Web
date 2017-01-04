@@ -14,6 +14,7 @@ var videoTempPath = "./videoTemp/";
 var resultpath = "./public/images/result/";
 var childProcessFlag = 0;
 var child;
+var isG = 0; // the switch to change the python way or C way
 
 function data(req, res, next) {
     res.render('data', { title: 'Video Segmentation By G&C' })
@@ -35,8 +36,8 @@ function uploadFile(req, res, next) {
         res.send(videoMD5);
         if (fields.selection == 0) {
             childProcessFlag = 1;
-            if(fields.isGoogle == 1) calSegmentByGoogle(videoMD5, type, fields.isGoogle);
-            else generateGIF(videoMD5, type, fields.isGoogle);
+            if(isG == 1) calSegmentByGoogle(videoMD5, type, isG);
+            else generateGIF(videoMD5, type, isG);
         }
     })
 }
