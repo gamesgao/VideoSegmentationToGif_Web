@@ -8,11 +8,10 @@ import time
 import cv2
 import glob
 import os
-import json
 import imageio
 from video import *
 
-skipFrame = 1
+skipFrame = 4
 readFrame = 5
 skipfirstFrame = 5
 
