@@ -59,3 +59,6 @@ test.*
 #idea
 .idea
 
+#data
+*.pb
+*.bg

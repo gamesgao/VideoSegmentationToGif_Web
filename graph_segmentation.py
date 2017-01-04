@@ -636,7 +636,7 @@ class GraphSegmentation:
         assert (video.getFrameNumber() > 0)
         assert (video.getFrameHeight() > 0)
         assert (video.getFrameWidth() > 0)
-        self.__T = video.getFrameNumber()
+        self.__T = min(video.getFrameNumber(), sevideo.getFrameNumber())
         self.__H = video.getFrameHeight()
         self.__W = video.getFrameWidth()
         self.__N = self.__T * self.__H * self.__W

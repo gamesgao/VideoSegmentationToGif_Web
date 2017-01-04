@@ -54,6 +54,8 @@ def readVideoFromFile(path):
     for filename in png:
         frame = cv2.imread(filename)
         result.addFrame(frame)
+    
+    for filename in png:
         if os.path.exists(filename):
             os.remove(filename)    
     return result
