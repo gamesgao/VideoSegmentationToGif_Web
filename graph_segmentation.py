@@ -662,35 +662,42 @@ class GraphSegmentation:
         name = raw_input("")
         fig = json.loads(name)
         bgLabels = cv2.imread("./videoTemp/" + source.split(".")[0] + '.bg')
-        bgHeight = len(bgLabels)
-        bgWidth = len(bgLabels[0])
-        gif = []
-        for t in range(self.__T):
-            coloredLabels = np.zeros((self.__H, self.__W, 3), dtype=np.uint8)
-            if (t == 0):
+        if (bgLabels is None):
+            print "Background picture is missing!"
+            gif = []
+            imageio.mimsave("./public/images/result/" + source + '.gif', gif)
+        elif (fig is None):
+            print "User Interaction is missing!"
+        else:
+            bgHeight = len(bgLabels)
+            bgWidth = len(bgLabels[0])
+            gif = []
+            for t in range(self.__T):
+                coloredLabels = np.zeros((self.__H, self.__W, 3), dtype=np.uint8)
+                if (t == 0):
+                    for i in range(self.__H):
+                        for j in range(self.__W):
+                            if (fig[i][j] == 1):
+                                bgr = sevideo.get(t, i, j)
+                                b = bgr[0]
+                                g = bgr[1]
+                                r = bgr[2]
+                                clrToWhether[(b, g, r)] = 1
                 for i in range(self.__H):
                     for j in range(self.__W):
-                        if (fig[i][j] == 1):
-                            bgr = sevideo.get(t, i, j)
-                            b = bgr[0]
-                            g = bgr[1]
-                            r = bgr[2]
-                            clrToWhether[(b, g, r)] = 1
-            for i in range(self.__H):
-                for j in range(self.__W):
-                    bgr = sevideo.get(t, i, j)
-                    b = bgr[0]
-                    g = bgr[1]
-                    r = bgr[2]
-                    if clrToWhether.has_key((b, g, r)):
-                        coloredLabels[i][j][0] = video.get(t, i, j)[2]
-                        coloredLabels[i][j][1] = video.get(t, i, j)[1]
-                        coloredLabels[i][j][2] = video.get(t, i, j)[0]
+                        bgr = sevideo.get(t, i, j)
+                        b = bgr[0]
+                        g = bgr[1]
+                        r = bgr[2]
+                        if clrToWhether.has_key((b, g, r)):
+                            coloredLabels[i][j][0] = video.get(t, i, j)[2]
+                            coloredLabels[i][j][1] = video.get(t, i, j)[1]
+                            coloredLabels[i][j][2] = video.get(t, i, j)[0]
 
-                    else:
-                        coloredLabels[i][j][0] = bgLabels[i % bgHeight][j % bgWidth][2]
-                        coloredLabels[i][j][1] = bgLabels[i % bgHeight][j % bgWidth][1]
-                        coloredLabels[i][j][2] = bgLabels[i % bgHeight][j % bgWidth][0]
-            gif.append(coloredLabels[:])
+                        else:
+                            coloredLabels[i][j][0] = bgLabels[i % bgHeight][j % bgWidth][2]
+                            coloredLabels[i][j][1] = bgLabels[i % bgHeight][j % bgWidth][1]
+                            coloredLabels[i][j][2] = bgLabels[i % bgHeight][j % bgWidth][0]
+                gif.append(coloredLabels[:])
 
-        imageio.mimsave("./public/images/result/" + source + '.gif', gif)
+            imageio.mimsave("./public/images/result/" + source + '.gif', gif)
