@@ -11,7 +11,7 @@ import os
 import imageio
 from video import *
 
-skipFrame = 4
+skipFrame = 2
 readFrame = 5
 skipfirstFrame = 5
 
