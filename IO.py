@@ -12,9 +12,9 @@ import json
 import imageio
 from video import *
 
-skipFrame = 0
+skipFrame = 1
 readFrame = 5
-skipfirstFrame = 0
+skipfirstFrame = 5
 
 def readVideo(path):
     if len(path) == 0:
