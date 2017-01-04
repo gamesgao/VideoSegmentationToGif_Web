@@ -13,7 +13,7 @@ from video import *
 
 skipFrame = 3
 readFrame = 5
-skipfirstFrame = 1
+skipfirstFrame = 3
 
 def readVideo(path, isGoogle):
     if len(path) == 0:
