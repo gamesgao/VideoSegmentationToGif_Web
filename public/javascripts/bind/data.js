@@ -24,7 +24,8 @@ var app = new Vue({
         uploadImgOpen: false, //img图片上传
         gifPath: "", //gif文件路径
         filePath: "", //video文件路径
-        imgFilePath: "" //img文件路径
+        imgFilePath: "", //img文件路径
+        funcSelection: 1 //python implement or C implement
     },
     computed: {
         progress: function() {
@@ -56,7 +57,7 @@ var app = new Vue({
             var fileFormData = new FormData();
             fileFormData.append("file", file);
             fileFormData.append("selection", selection);
-            fileFormData.append("isGoogle", 1);
+            fileFormData.append("isGoogle", this.funcSelection);
             if (selection == 1) fileFormData.append("videoMD5", this.videoMD5);
             // fileFormData.append("fileName", file.name);
 
