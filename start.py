@@ -17,7 +17,7 @@ if(isGoogle == 1):
     sevideo = IO.readVideoFromFile("./temp/")
 else:
     flowVideo = IO.readFlowVideo(readSource)
-    flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
+    # flowVideo = IO.readFlowVideoFromFile("./flowTemp/")
 
 if(isGoogle != 1):
     assert video.getFrameNumber() > 0
