@@ -25,7 +25,7 @@ var app = new Vue({
         gifPath: "", //gif文件路径
         filePath: "", //video文件路径
         imgFilePath: "", //img文件路径
-        funcSelection: 1 //python implement or C implement
+        funcSelection: 0 //python implement or C implement
     },
     computed: {
         progress: function() {
