@@ -26,10 +26,12 @@ def readVideo(path, isGoogle):
         print('Cannot initialize video capture:' + path)
         sys.exit(-1)
 
+    global skipFrame
+    global skipfirstFrame
     result = Video()
     if isGoogle == 1:
-        global skipFrame = 0
-        global skipfirstFrame = 0
+        skipFrame = 0
+        skipfirstFrame = 0
     readFrame = int((cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)-skipfirstFrame)/(skipFrame+1))
     # ret, frame = cap.read()
     for i in range(skipfirstFrame):
