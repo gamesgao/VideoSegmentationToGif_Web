@@ -12,7 +12,7 @@ else:
 # visualize = False
     readSource = "./videoTemp/" + source
 
-video = IO.readVideo(readSource)
+video = IO.readVideo(readSource, isGoogle)
 if(isGoogle == 1):
     sevideo = IO.readVideoFromFile("./temp/")
 else:
@@ -41,7 +41,6 @@ fig = []
 if(isGoogle == 1):
     segmenter.buildAndLabelAndPrint(video, sevideo, source, fig)
 else:
-    pass
     # Or you can use our version:
     segmenter.buildGraph(video, flowVideo)
     segmenter.buildEdges()

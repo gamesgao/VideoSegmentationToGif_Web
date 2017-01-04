@@ -12,11 +12,11 @@ import json
 import imageio
 from video import *
 
-skipFrame = 1
+skipFrame = 0
 readFrame = 5
-skipfirstFrame = 5
+skipfirstFrame = 3
 
-def readVideo(path):
+def readVideo(path, isGoogle):
     if len(path) == 0:
         cap = cv2.VideoCapture('1.MOV')
     else:
@@ -27,6 +27,9 @@ def readVideo(path):
         sys.exit(-1)
 
     result = Video()
+    if isGoogle == 1:
+        skipFrame = 0
+        skipfirstFrame = 0
     readFrame = int((cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT)-skipfirstFrame)/(skipFrame+1))
     # ret, frame = cap.read()
     for i in range(skipfirstFrame):
