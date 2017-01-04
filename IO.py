@@ -11,9 +11,9 @@ import os
 import imageio
 from video import *
 
-skipFrame = 3
+skipFrame = 4
 readFrame = 5
-skipfirstFrame = 3
+skipfirstFrame = 5
 
 def readVideo(path, isGoogle):
     if len(path) == 0:
