@@ -74,22 +74,6 @@ function renderSegmentVideo(videoMD5, type, isGoogle){
     });
 }
 
-// function generateVideo(videoMD5, type, isGoogle){
-//     child2 = cp.exec(`python imgToVideo.py ${videoTempPath}${videoMD5}.${type}.avi`, function(error, stdout, stderr){
-//         if (error) {
-//             childProcessFlag = -1;
-//             console.log(error.stack);
-//             console.log('Error code: ' + error.code);
-//         }
-//         // childProcessFlag = 0;
-//         console.log('Child Process STDOUT: ' + stdout);
-//         generateGIF(videoMD5, type, isGoogle);
-//     });
-//     child2.stdout.on('data', function(data) {
-//             console.log(data);
-//     });
-// }
-
 function generateGIF(videoMD5, type, isGoogle){
     console.log(`python start.py ${videoMD5}.${type} ${isGoogle}`);
     child = cp.exec(`python start.py ${videoMD5}.${type} ${isGoogle}`, function(error, stdout, stderr) {
@@ -102,9 +86,7 @@ function generateGIF(videoMD5, type, isGoogle){
         console.log('Child Process STDOUT: ' + stdout);
     })
     child.stdout.on('data', function(data) {
-        // console.log(videoMD5 + '.' + type);
-        // console.log(data.trim());
-        // console.log(data.trim() == (videoMD5 + '.' + type));
+        console.log(data.trim() == (videoMD5 + '.' + type));
         if (data.trim() == (videoMD5 + '.' + type)) {
             childProcessFlag = 2;
         } else {
@@ -123,14 +105,6 @@ function checkAnalyse(req, res, next) {
 function getMask(req, res, next) {
     var mask = req.body.mask;
     childProcessFlag = 3;
-    // console.log(mask.length);
-    // console.log(mask[0].length);
-    // for (var i = mask.length - 1; i >= 0; i--) {
-    //     for (var j = mask[i].length - 1; j >= 0; j--) {
-    //         if (mask[i][j] == 1) console.log(`(${i}.${j})`);
-    //     }
-    // }
-    // fs.writeFile('1.txt', JSON.stringify(mask));
     child.stdin.write(JSON.stringify(mask));
     child.stdin.end();
     res.send("HA");
