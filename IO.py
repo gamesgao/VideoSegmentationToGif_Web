@@ -36,8 +36,8 @@ def readVideo(path, isGoogle):
     for i in range(skipfirstFrame):
         ret, frame = cap.read()
     ret, frame = cap.read()
-    # while(ret):
-    for i in range(readFrame):
+    while(ret):
+    # for i in range(readFrame):
         result.addFrame(frame)
         for i in range(skipFrame):
             ret, frame = cap.read()
@@ -108,8 +108,8 @@ def readFlowVideo(path):
     prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     ret, frame = cap.read()
     # prevFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    # while (ret):
-    for i in range(readFrame):
+    while (ret):
+    # for i in range(readFrame):
         nextFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # cv2.imshow(windowName, frame)
         result.addFrame(cv2.calcOpticalFlowFarneback(prevFrame,

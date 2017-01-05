@@ -14,7 +14,7 @@ var videoTempPath = "./videoTemp/";
 var resultpath = "./public/images/result/";
 var childProcessFlag = 0;
 var child;
-var isG = 0; // the switch to change the python way or C way
+var isG = 1; // the switch to change the python way 0 or C way 1
 
 function data(req, res, next) {
     res.render('data', { title: 'Video Segmentation By G&C' })
