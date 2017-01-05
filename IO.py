@@ -200,7 +200,7 @@ def writeColoredSegmentationVideo(path, video, fig, orivideo, distill, source):
                     coloredLabels[i][j] = colors[label]
         # write as image
         # coloredLabels
-        cv2.imwrite(str(path) + '.' + str(t) + '.jpg', coloredLabels)
+        # cv2.imwrite(str(path) + '.' + str(t) + '.jpg', coloredLabels)
         if (distill):
             gif.append(coloredLabels[:])
     if (distill):
