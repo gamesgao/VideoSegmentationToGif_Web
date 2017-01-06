@@ -77,7 +77,7 @@
                     <canvas v-if="!gifShow" id="interact" width="0" height="0"></canvas>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" v-if="!gifShow">
                 <form>
                     <div class="form-group">
                         <label for="imgFileBtn">选择文件</label>

@@ -81,8 +81,7 @@ class GraphSegmentationEuclideanRGBFlowAngle(GraphSegmentationDistance):
             a = math.acos(cos_a)
             pi = math.pi + 1e-4
             assert (0 <= a <= pi)
-            return self._weights[0] * math.sqrt(int(dr * dr) + int(dg * dg) + int(db * db)) / float(self.__D) + self._weights[
-                                                                                                     1] * a / pi
+            return self._weights[0] * math.sqrt(int(dr * dr) + int(dg * dg) + int(db * db)) / float(self.__D) + self._weights[1] * a / pi
         else:
             return math.sqrt(int(dr * dr) + int(dg * dg) + int(db * db)) / self.__D
 
